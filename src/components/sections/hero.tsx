@@ -42,13 +42,27 @@ export function HeroSection() {
       id="home"
       className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-emerald-50 via-white to-emerald-50 dark:from-gray-900 dark:via-gray-950 dark:to-emerald-950/20 pt-16 sm:pt-20"
     >
+      {/* Background Image */}
+      <div 
+        className="absolute inset-0 z-0"
+        style={{
+          backgroundImage: "url('/images/hero-bg.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}
+      >
+        {/* Overlay for better text readability */}
+        <div className="absolute inset-0 bg-gradient-to-br from-emerald-50/90 via-white/80 to-emerald-50/90 dark:from-gray-900/95 dark:via-gray-950/90 dark:to-emerald-950/30" />
+      </div>
+
       {/* Enhanced Background Pattern - Hidden on mobile for performance */}
-      <div className="absolute inset-0 bg-grid-pattern opacity-[0.03] dark:opacity-[0.05] hidden sm:block" />
+      <div className="absolute inset-0 bg-grid-pattern opacity-[0.03] dark:opacity-[0.05] hidden sm:block z-[1]" />
       
       {/* Improved Animated Blobs with mobile-optimized positioning */}
-      <div className="absolute top-5 left-0 sm:top-10 sm:left-5 w-64 h-64 sm:w-96 sm:h-96 bg-emerald-200 dark:bg-emerald-900/30 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-40 sm:opacity-60 animate-blob" />
-      <div className="absolute top-20 right-0 sm:top-32 sm:right-8 w-56 h-56 sm:w-80 sm:h-80 bg-emerald-300 dark:bg-emerald-800/30 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-40 sm:opacity-60 animate-blob animation-delay-2000" />
-      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 w-48 h-48 sm:w-72 sm:h-72 bg-emerald-200 dark:bg-emerald-900/30 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-30 sm:opacity-50 animate-blob animation-delay-4000" />
+      <div className="absolute top-5 left-0 sm:top-10 sm:left-5 w-64 h-64 sm:w-96 sm:h-96 bg-emerald-200 dark:bg-emerald-900/30 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-40 sm:opacity-60 animate-blob z-[1]" />
+      <div className="absolute top-20 right-0 sm:top-32 sm:right-8 w-56 h-56 sm:w-80 sm:h-80 bg-emerald-300 dark:bg-emerald-800/30 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-40 sm:opacity-60 animate-blob animation-delay-2000 z-[1]" />
+      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 w-48 h-48 sm:w-72 sm:h-72 bg-emerald-200 dark:bg-emerald-900/30 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-30 sm:opacity-50 animate-blob animation-delay-4000 z-[1]" />
 
       <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 md:py-20">
         <div className="text-center max-w-5xl mx-auto">
