@@ -124,8 +124,8 @@ export function StepsSection() {
       id="steps" 
       className="relative py-24 sm:py-28 bg-gradient-to-b from-white via-gray-50/50 to-white dark:from-gray-950 dark:via-gray-900/50 dark:to-gray-950 overflow-hidden"
     >
-      {/* Background decorative elements */}
-      <div className="absolute top-0 left-0 w-full h-full opacity-30 dark:opacity-20">
+      {/* Background decorative elements - Hidden on mobile for performance */}
+      <div className="absolute top-0 left-0 w-full h-full opacity-30 dark:opacity-20 hidden sm:block">
         <div className="absolute top-20 left-10 w-96 h-96 bg-emerald-200 dark:bg-emerald-900/30 rounded-full blur-3xl" />
         <div className="absolute bottom-20 right-10 w-96 h-96 bg-blue-200 dark:bg-blue-900/30 rounded-full blur-3xl" />
       </div>
@@ -133,20 +133,20 @@ export function StepsSection() {
       <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
         {/* Enhanced Section Header */}
         <div className="text-center max-w-4xl mx-auto mb-20">
-          <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-emerald-100 to-emerald-50 dark:from-emerald-900/40 dark:to-emerald-950/40 rounded-full mb-8 shadow-lg backdrop-blur-sm border border-emerald-200/50 dark:border-emerald-800/50">
-            <div className="p-1.5 rounded-full bg-emerald-500/10">
-              <CheckCircle className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+          <div className="inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 bg-gradient-to-r from-emerald-100 to-emerald-50 dark:from-emerald-900/40 dark:to-emerald-950/40 rounded-full mb-6 sm:mb-8 shadow-lg backdrop-blur-sm border border-emerald-200/50 dark:border-emerald-800/50">
+            <div className="p-1 sm:p-1.5 rounded-full bg-emerald-500/10">
+              <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-600 dark:text-emerald-400" />
             </div>
-            <span className="text-sm font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wide">
+            <span className="text-xs sm:text-sm font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wide">
               {language === "ar" ? "كيف يعمل" : "How It Works"}
             </span>
           </div>
-          <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 dark:text-white mb-6 leading-tight">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-gray-900 dark:text-white mb-4 sm:mb-6 leading-tight px-2">
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 dark:from-white dark:via-gray-200 dark:to-white">
               {language === "ar" ? "خطوات شراء الأصل وتشغيله" : "Asset Purchase and Operation Steps"}
             </span>
           </h2>
-          <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed px-4">
             {language === "ar" 
               ? "ستة خطوات بسيطة للبدء في استثمارك وتحقيق دخل شهري ثابت"
               : "Six simple steps to start your investment and achieve stable monthly income"}
@@ -154,7 +154,7 @@ export function StepsSection() {
         </div>
 
         {/* Enhanced Steps Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6 lg:gap-8 mb-12 sm:mb-14 md:mb-16">
           {steps.map((step, index) => {
             const Icon = step.icon;
             const isVisible = visibleCards.has(index);
@@ -171,42 +171,42 @@ export function StepsSection() {
                 style={{ transitionDelay: `${index * 100}ms` }}
               >
                 {/* Enhanced Card with Glassmorphism */}
-                <div className={`h-full relative p-8 rounded-3xl ${step.bgColor} backdrop-blur-sm border-2 ${step.borderColor} hover:border-emerald-400 dark:hover:border-emerald-600 transition-all duration-500 hover:shadow-2xl hover:-translate-y-3 hover:scale-[1.02] overflow-hidden`}>
+                <div className={`h-full relative p-5 sm:p-6 md:p-7 lg:p-8 rounded-2xl sm:rounded-3xl ${step.bgColor} backdrop-blur-sm border-2 ${step.borderColor} hover:border-emerald-400 dark:hover:border-emerald-600 active:scale-[0.98] transition-all duration-500 hover:shadow-2xl hover:-translate-y-3 hover:scale-[1.02] overflow-hidden`}>
                   {/* Animated background gradient */}
                   <div className={`absolute inset-0 bg-gradient-to-br ${step.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`} />
                   
                   {/* Step Number Badge */}
-                  <div className="flex items-start justify-between mb-6">
-                    <div className="flex items-center gap-4">
-                      <div className={`relative flex-shrink-0 w-14 h-14 rounded-2xl bg-gradient-to-br ${step.color} flex items-center justify-center text-white font-bold text-xl shadow-xl group-hover:scale-110 transition-transform duration-300`}>
+                  <div className="flex items-start justify-between mb-4 sm:mb-5 md:mb-6">
+                    <div className="flex items-center gap-3 sm:gap-4">
+                      <div className={`relative flex-shrink-0 w-12 h-12 sm:w-13 sm:h-13 md:w-14 md:h-14 rounded-xl sm:rounded-2xl bg-gradient-to-br ${step.color} flex items-center justify-center text-white font-bold text-lg sm:text-xl shadow-xl group-hover:scale-110 transition-transform duration-300`}>
                         <span className="relative z-10">{step.id}</span>
-                        <div className={`absolute inset-0 bg-gradient-to-br ${step.color} rounded-2xl blur-md opacity-50 group-hover:opacity-75 transition-opacity`} />
+                        <div className={`absolute inset-0 bg-gradient-to-br ${step.color} rounded-xl sm:rounded-2xl blur-md opacity-50 group-hover:opacity-75 transition-opacity`} />
                       </div>
-                      <div className="p-3 rounded-xl bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50 group-hover:scale-110 transition-transform duration-300">
-                        <Icon className="w-7 h-7 text-gray-700 dark:text-gray-300" />
+                      <div className="p-2 sm:p-2.5 md:p-3 rounded-lg sm:rounded-xl bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50 group-hover:scale-110 transition-transform duration-300">
+                        <Icon className="w-6 h-6 sm:w-6.5 sm:h-6.5 md:w-7 md:h-7 text-gray-700 dark:text-gray-300" />
                       </div>
                     </div>
                     {/* Arrow indicator */}
-                    <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 hidden sm:block">
                       <ArrowRight className={`w-5 h-5 text-emerald-600 dark:text-emerald-400 ${language === "ar" ? "rotate-180" : ""}`} />
                     </div>
                   </div>
 
                   {/* Title */}
-                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors duration-300">
+                  <h3 className="text-xl sm:text-1.5xl md:text-2xl font-bold text-gray-900 dark:text-white mb-3 sm:mb-4 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors duration-300">
                     {language === "ar" ? step.titleAr : step.titleEn}
                   </h3>
 
                   {/* Description */}
-                  <p className="text-gray-600 dark:text-gray-400 leading-relaxed text-base group-hover:text-gray-700 dark:group-hover:text-gray-300 transition-colors duration-300">
+                  <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 leading-relaxed group-hover:text-gray-700 dark:group-hover:text-gray-300 transition-colors duration-300">
                     {language === "ar" ? step.descAr : step.descEn}
                   </p>
 
                   {/* Enhanced Decorative Element */}
-                  <div className={`absolute -top-10 -right-10 rtl:right-auto rtl:-left-10 w-32 h-32 bg-gradient-to-br ${step.color} rounded-full blur-3xl opacity-0 group-hover:opacity-30 transition-opacity duration-500`} />
+                  <div className={`absolute -top-10 -right-10 rtl:right-auto rtl:-left-10 w-32 h-32 bg-gradient-to-br ${step.color} rounded-full blur-3xl opacity-0 group-hover:opacity-30 transition-opacity duration-500 hidden sm:block`} />
                   
                   {/* Bottom accent line */}
-                  <div className={`absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r ${step.color} opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-3xl`} />
+                  <div className={`absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r ${step.color} opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-2xl sm:rounded-b-3xl`} />
                 </div>
 
                 {/* Enhanced Connection Arrow (for desktop) */}
@@ -224,15 +224,15 @@ export function StepsSection() {
         </div>
 
         {/* Enhanced CTA */}
-        <div className="text-center">
+        <div className="text-center px-4">
           <Link
             href="#register"
             onClick={handleScrollClick}
-            className="group relative inline-flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-emerald-600 via-emerald-500 to-emerald-600 hover:from-emerald-700 hover:via-emerald-600 hover:to-emerald-700 text-white font-bold text-lg rounded-2xl shadow-2xl hover:shadow-emerald-500/50 transition-all duration-300 transform hover:scale-105 overflow-hidden"
+            className="group relative inline-flex items-center gap-2 sm:gap-3 px-6 sm:px-8 md:px-10 py-3.5 sm:py-4 md:py-5 bg-gradient-to-r from-emerald-600 via-emerald-500 to-emerald-600 hover:from-emerald-700 hover:via-emerald-600 hover:to-emerald-700 active:from-emerald-800 active:via-emerald-700 active:to-emerald-800 text-white font-bold text-sm sm:text-base md:text-lg rounded-xl sm:rounded-2xl shadow-2xl hover:shadow-emerald-500/50 active:scale-[0.98] transition-all duration-300 transform hover:scale-105 overflow-hidden touch-manipulation w-full sm:w-auto min-w-[200px] justify-center"
           >
-            <span className="relative z-10 flex items-center gap-3">
+            <span className="relative z-10 flex items-center gap-2 sm:gap-3">
               <span>{language === "ar" ? "ابدأ الآن" : "Start Now"}</span>
-              <ArrowRight className={`w-5 h-5 transition-transform duration-300 group-hover:translate-x-1 ${language === "ar" ? "rotate-180" : ""}`} />
+              <ArrowRight className={`w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 group-hover:translate-x-1 ${language === "ar" ? "rotate-180" : ""}`} />
             </span>
             <div className="absolute inset-0 bg-gradient-to-r from-emerald-500 to-emerald-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
