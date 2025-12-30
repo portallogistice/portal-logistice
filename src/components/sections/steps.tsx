@@ -6,6 +6,13 @@ import { Lightbulb, MessageCircle, ShoppingCart, FileCheck, Play, TrendingDown, 
 import Link from "next/link";
 import { useEffect, useState, useRef } from "react";
 
+// Brand colors from logo
+const colors = {
+  primary: "#003C7F",
+  secondary: "#00A8E8",
+  accent: "#0080C8",
+};
+
 const steps = [
   {
     id: 1,
@@ -13,10 +20,7 @@ const steps = [
     titleAr: "الفكرة",
     titleEn: "The Idea",
     descAr: "فكرة المشروع الاستثماري هي شراء دراجة نارية وتشغيلها في مجال الخدمات اللوجستية لتسليم الطلبات بهدف تحقيق عائد ربح يتجاوز 120٪",
-    descEn: "The investment project idea is to buy a motorcycle and operate it in logistics services for order delivery, aiming to achieve a profit return exceeding 120%",
-    color: "from-blue-500 to-blue-600",
-    bgColor: "bg-blue-50 dark:bg-blue-950/20",
-    borderColor: "border-blue-200 dark:border-blue-900/50",
+    descEn: "Investment project to purchase and operate motorcycles in logistics services, achieving profit returns exceeding 120%",
   },
   {
     id: 2,
@@ -24,10 +28,7 @@ const steps = [
     titleAr: "التواصل",
     titleEn: "Contact",
     descAr: "نحن متحمسون للتواصل معك ومناقشة الفرص الاستثمارية والإجابة على جميع استفساراتك وتوضيح المزيد من التفاصيل",
-    descEn: "We're excited to connect with you, discuss investment opportunities, answer all your questions, and clarify more details",
-    color: "from-emerald-500 to-emerald-600",
-    bgColor: "bg-emerald-50 dark:bg-emerald-950/20",
-    borderColor: "border-emerald-200 dark:border-emerald-900/50",
+    descEn: "Connect with you, discuss investment opportunities, answer questions, and clarify details",
   },
   {
     id: 3,
@@ -35,10 +36,7 @@ const steps = [
     titleAr: "شراء الأصل",
     titleEn: "Asset Purchase",
     descAr: "نوفر شراء الأصل نقداً أو بالتقسيط عبر تابي وتمارا، ونكمل جميع الإجراءات الحكومية والتأمين واستخراج الوثائق",
-    descEn: "We provide asset purchase in cash or installments via Tabby and Tamara, and complete all government procedures, insurance, and document extraction",
-    color: "from-purple-500 to-purple-600",
-    bgColor: "bg-purple-50 dark:bg-purple-950/20",
-    borderColor: "border-purple-200 dark:border-purple-900/50",
+    descEn: "Asset purchase in cash or installments via Tabby/Tamara, complete government procedures and insurance",
   },
   {
     id: 4,
@@ -46,10 +44,7 @@ const steps = [
     titleAr: "العقود والضمانات",
     titleEn: "Contracts & Guarantees",
     descAr: "عقود وضمانات موثقة من مركز الأعمال السعودي تعكس الاحتراف والمصداقية، مع تحديد التزامات وحقوق كل طرف",
-    descEn: "Contracts and guarantees certified by the Saudi Business Center reflecting professionalism and credibility, defining obligations and rights of each party",
-    color: "from-amber-500 to-amber-600",
-    bgColor: "bg-amber-50 dark:bg-amber-950/20",
-    borderColor: "border-amber-200 dark:border-amber-900/50",
+    descEn: "Certified contracts from Saudi Business Center, defining obligations and rights of each party",
   },
   {
     id: 5,
@@ -57,10 +52,7 @@ const steps = [
     titleAr: "التشغيل",
     titleEn: "Operation",
     descAr: "شركة متخصصة في الخدمات اللوجستية مع خبرة واسعة ونظام متقدم لتتبع وإدارة الدراجات النارية",
-    descEn: "Specialized logistics company with extensive experience and advanced system for tracking and managing motorcycles",
-    color: "from-red-500 to-red-600",
-    bgColor: "bg-red-50 dark:bg-red-950/20",
-    borderColor: "border-red-200 dark:border-red-900/50",
+    descEn: "Specialized logistics company with advanced tracking and management system",
   },
   {
     id: 6,
@@ -68,10 +60,7 @@ const steps = [
     titleAr: "التصفية",
     titleEn: "Liquidation",
     descAr: "إمكانية تصفية الاستثمار بعد 3 أشهر بدون رسوم إضافية، مع وعد بشراء الأصل بخصم 35٪ كمعدل إهلاك",
-    descEn: "Ability to liquidate investment after 3 months without additional fees, with a promise to buy back the asset at 35% discount as depreciation rate",
-    color: "from-teal-500 to-teal-600",
-    bgColor: "bg-teal-50 dark:bg-teal-950/20",
-    borderColor: "border-teal-200 dark:border-teal-900/50",
+    descEn: "Liquidate investment after 3 months without fees, asset buyback at 35% depreciation",
   },
 ];
 
@@ -90,15 +79,13 @@ export function StepsSection() {
           }
         });
       },
-      { threshold: 0.1, rootMargin: "0px 0px -100px 0px" }
+      { threshold: 0.15, rootMargin: "0px" }
     );
 
     const cards = sectionRef.current?.querySelectorAll("[data-index]");
     cards?.forEach((card) => observer.observe(card));
 
-    return () => {
-      cards?.forEach((card) => observer.unobserve(card));
-    };
+    return () => observer.disconnect();
   }, []);
 
   const handleScrollClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -122,100 +109,152 @@ export function StepsSection() {
     <section 
       ref={sectionRef}
       id="steps" 
-      className="relative py-24 sm:py-28 bg-gradient-to-b from-white via-gray-50/50 to-white dark:from-gray-950 dark:via-gray-900/50 dark:to-gray-950 overflow-hidden"
+      className="relative py-20 lg:py-28 bg-gradient-to-b from-white via-blue-50/30 to-white dark:from-gray-950 dark:via-blue-950/10 dark:to-gray-950"
     >
-      {/* Background decorative elements - Hidden on mobile for performance */}
-      <div className="absolute top-0 left-0 w-full h-full opacity-30 dark:opacity-20 hidden sm:block">
-        <div className="absolute top-20 left-10 w-96 h-96 bg-emerald-200 dark:bg-emerald-900/30 rounded-full blur-3xl" />
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-blue-200 dark:bg-blue-900/30 rounded-full blur-3xl" />
+      {/* Optimized Background Elements */}
+      <div className="absolute inset-0 opacity-5 pointer-events-none">
+        <div 
+          className="absolute top-20 left-10 w-96 h-96 rounded-full blur-3xl"
+          style={{ 
+            background: `radial-gradient(circle, ${colors.secondary}, transparent)`,
+          }}
+        />
+        <div 
+          className="absolute bottom-20 right-10 w-96 h-96 rounded-full blur-3xl"
+          style={{ 
+            background: `radial-gradient(circle, ${colors.primary}, transparent)`,
+          }}
+        />
       </div>
 
       <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Enhanced Section Header */}
-        <div className="text-center max-w-4xl mx-auto mb-20">
-          <div className="inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 bg-gradient-to-r from-emerald-100 to-emerald-50 dark:from-emerald-900/40 dark:to-emerald-950/40 rounded-full mb-6 sm:mb-8 shadow-lg backdrop-blur-sm border border-emerald-200/50 dark:border-emerald-800/50">
-            <div className="p-1 sm:p-1.5 rounded-full bg-emerald-500/10">
-              <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-600 dark:text-emerald-400" />
+        {/* Section Header */}
+        <div className="text-center max-w-3xl mx-auto mb-16 lg:mb-20">
+          <div 
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6 backdrop-blur-sm"
+            style={{
+              backgroundColor: `${colors.secondary}10`,
+              border: `1px solid ${colors.secondary}20`,
+            }}
+          >
+            <div 
+              className="p-1.5 rounded-full"
+              style={{ backgroundColor: `${colors.secondary}20` }}
+            >
+              <CheckCircle className="w-4 h-4" style={{ color: colors.secondary }} />
             </div>
-            <span className="text-xs sm:text-sm font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wide">
+            <span 
+              className="text-sm font-bold uppercase tracking-wide"
+              style={{ color: colors.primary }}
+            >
               {language === "ar" ? "كيف يعمل" : "How It Works"}
             </span>
           </div>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-gray-900 dark:text-white mb-4 sm:mb-6 leading-tight px-2">
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 dark:from-white dark:via-gray-200 dark:to-white">
-              {language === "ar" ? "خطوات شراء الأصل وتشغيله" : "Asset Purchase and Operation Steps"}
+          
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 leading-tight">
+            <span style={{ color: colors.primary }}>
+              {language === "ar" ? "خطوات شراء الأصل " : "Asset Purchase "}
+            </span>
+            <span 
+              className="bg-clip-text text-transparent"
+              style={{
+                backgroundImage: `linear-gradient(135deg, ${colors.secondary} 0%, ${colors.accent} 100%)`,
+              }}
+            >
+              {language === "ar" ? "وتشغيله" : "& Operation"}
             </span>
           </h2>
-          <p className="text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed px-4">
+          
+          <p className="text-lg text-gray-600 dark:text-gray-400">
             {language === "ar" 
               ? "ستة خطوات بسيطة للبدء في استثمارك وتحقيق دخل شهري ثابت"
               : "Six simple steps to start your investment and achieve stable monthly income"}
           </p>
         </div>
 
-        {/* Enhanced Steps Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6 lg:gap-8 mb-12 sm:mb-14 md:mb-16">
+        {/* Steps Grid - Optimized */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-16">
           {steps.map((step, index) => {
             const Icon = step.icon;
             const isVisible = visibleCards.has(index);
+            const isEven = index % 2 === 0;
             
             return (
               <div
                 key={step.id}
                 data-index={index}
-                className={`relative group transition-all duration-1000 ${
-                  isVisible 
-                    ? "opacity-100 translate-y-0" 
-                    : "opacity-0 translate-y-10"
+                className={`relative group transition-all duration-700 ${
+                  isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
                 }`}
-                style={{ transitionDelay: `${index * 100}ms` }}
+                style={{ 
+                  transitionDelay: `${index * 80}ms`,
+                  willChange: isVisible ? 'auto' : 'transform, opacity',
+                }}
               >
-                {/* Enhanced Card with Glassmorphism */}
-                <div className={`h-full relative p-5 sm:p-6 md:p-7 lg:p-8 rounded-2xl sm:rounded-3xl ${step.bgColor} backdrop-blur-sm border-2 ${step.borderColor} hover:border-emerald-400 dark:hover:border-emerald-600 active:scale-[0.98] transition-all duration-500 hover:shadow-2xl hover:-translate-y-3 hover:scale-[1.02] overflow-hidden`}>
-                  {/* Animated background gradient */}
-                  <div className={`absolute inset-0 bg-gradient-to-br ${step.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`} />
-                  
-                  {/* Step Number Badge */}
-                  <div className="flex items-start justify-between mb-4 sm:mb-5 md:mb-6">
-                    <div className="flex items-center gap-3 sm:gap-4">
-                      <div className={`relative flex-shrink-0 w-12 h-12 sm:w-13 sm:h-13 md:w-14 md:h-14 rounded-xl sm:rounded-2xl bg-gradient-to-br ${step.color} flex items-center justify-center text-white font-bold text-lg sm:text-xl shadow-xl group-hover:scale-110 transition-transform duration-300`}>
-                        <span className="relative z-10">{step.id}</span>
-                        <div className={`absolute inset-0 bg-gradient-to-br ${step.color} rounded-xl sm:rounded-2xl blur-md opacity-50 group-hover:opacity-75 transition-opacity`} />
-                      </div>
-                      <div className="p-2 sm:p-2.5 md:p-3 rounded-lg sm:rounded-xl bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50 group-hover:scale-110 transition-transform duration-300">
-                        <Icon className="w-6 h-6 sm:w-6.5 sm:h-6.5 md:w-7 md:h-7 text-gray-700 dark:text-gray-300" />
-                      </div>
+                <div 
+                  className="h-full relative p-6 lg:p-8 rounded-2xl bg-white dark:bg-gray-900 border-2 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1"
+                  style={{
+                    borderColor: isEven ? `${colors.primary}20` : `${colors.secondary}20`,
+                  }}
+                >
+                  {/* Header */}
+                  <div className="flex items-center gap-4 mb-5">
+                    {/* Step Number */}
+                    <div 
+                      className="relative flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg transition-transform duration-300 group-hover:scale-110"
+                      style={{
+                        background: isEven 
+                          ? `linear-gradient(135deg, ${colors.primary} 0%, ${colors.accent} 100%)`
+                          : `linear-gradient(135deg, ${colors.secondary} 0%, ${colors.accent} 100%)`,
+                      }}
+                    >
+                      {step.id}
                     </div>
-                    {/* Arrow indicator */}
-                    <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 hidden sm:block">
-                      <ArrowRight className={`w-5 h-5 text-emerald-600 dark:text-emerald-400 ${language === "ar" ? "rotate-180" : ""}`} />
+                    
+                    {/* Icon */}
+                    <div 
+                      className="p-2.5 rounded-lg transition-colors"
+                      style={{
+                        backgroundColor: isEven ? `${colors.primary}10` : `${colors.secondary}10`,
+                      }}
+                    >
+                      <Icon 
+                        className="w-6 h-6" 
+                        style={{ color: isEven ? colors.primary : colors.secondary }}
+                      />
                     </div>
                   </div>
 
-                  {/* Title */}
-                  <h3 className="text-xl sm:text-1.5xl md:text-2xl font-bold text-gray-900 dark:text-white mb-3 sm:mb-4 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors duration-300">
+                  {/* Content */}
+                  <h3 
+                    className="text-xl font-bold mb-3 transition-colors"
+                    style={{ color: colors.primary }}
+                  >
                     {language === "ar" ? step.titleAr : step.titleEn}
                   </h3>
 
-                  {/* Description */}
-                  <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 leading-relaxed group-hover:text-gray-700 dark:group-hover:text-gray-300 transition-colors duration-300">
+                  <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
                     {language === "ar" ? step.descAr : step.descEn}
                   </p>
 
-                  {/* Enhanced Decorative Element */}
-                  <div className={`absolute -top-10 -right-10 rtl:right-auto rtl:-left-10 w-32 h-32 bg-gradient-to-br ${step.color} rounded-full blur-3xl opacity-0 group-hover:opacity-30 transition-opacity duration-500 hidden sm:block`} />
-                  
-                  {/* Bottom accent line */}
-                  <div className={`absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r ${step.color} opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-b-2xl sm:rounded-b-3xl`} />
+                  {/* Accent Line */}
+                  <div 
+                    className="absolute bottom-0 left-0 right-0 h-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    style={{
+                      background: isEven 
+                        ? `linear-gradient(90deg, ${colors.primary} 0%, ${colors.secondary} 100%)`
+                        : `linear-gradient(90deg, ${colors.secondary} 0%, ${colors.primary} 100%)`,
+                    }}
+                  />
                 </div>
 
-                {/* Enhanced Connection Arrow (for desktop) */}
-                {index < steps.length - 1 && index % 3 !== 2 && (
-                  <div className="hidden lg:block absolute top-1/2 -right-4 rtl:-right-auto rtl:-left-4 z-20">
-                    <div className="relative">
-                      <div className="w-8 h-0.5 bg-gradient-to-r from-emerald-400 via-emerald-500 to-transparent dark:from-emerald-600 dark:via-emerald-500" />
-                      <ArrowRight className={`absolute -right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-emerald-500 dark:text-emerald-400 ${language === "ar" ? "rotate-180" : ""}`} />
-                    </div>
+                {/* Connection Arrow */}
+                {index < steps.length - 1 && (index + 1) % 3 !== 0 && (
+                  <div className="hidden lg:block absolute top-1/2 -right-4 rtl:-left-4 rtl:right-auto z-20">
+                    <ArrowRight 
+                      className={`w-5 h-5 ${language === "ar" ? "rotate-180" : ""}`}
+                      style={{ color: `${colors.secondary}40` }}
+                    />
                   </div>
                 )}
               </div>
@@ -223,19 +262,20 @@ export function StepsSection() {
           })}
         </div>
 
-        {/* Enhanced CTA */}
-        <div className="text-center px-4">
+        {/* CTA Button */}
+        <div className="text-center">
           <Link
             href="#register"
             onClick={handleScrollClick}
-            className="group relative inline-flex items-center gap-2 sm:gap-3 px-6 sm:px-8 md:px-10 py-3.5 sm:py-4 md:py-5 bg-gradient-to-r from-emerald-600 via-emerald-500 to-emerald-600 hover:from-emerald-700 hover:via-emerald-600 hover:to-emerald-700 active:from-emerald-800 active:via-emerald-700 active:to-emerald-800 text-white font-bold text-sm sm:text-base md:text-lg rounded-xl sm:rounded-2xl shadow-2xl hover:shadow-emerald-500/50 active:scale-[0.98] transition-all duration-300 transform hover:scale-105 overflow-hidden touch-manipulation w-full sm:w-auto min-w-[200px] justify-center"
+            className="group inline-flex items-center gap-3 px-8 py-4 text-white font-bold text-lg rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 active:scale-95"
+            style={{
+              background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.secondary} 100%)`,
+            }}
           >
-            <span className="relative z-10 flex items-center gap-2 sm:gap-3">
-              <span>{language === "ar" ? "ابدأ الآن" : "Start Now"}</span>
-              <ArrowRight className={`w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 group-hover:translate-x-1 ${language === "ar" ? "rotate-180" : ""}`} />
-            </span>
-            <div className="absolute inset-0 bg-gradient-to-r from-emerald-500 to-emerald-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            <span>{language === "ar" ? "ابدأ الآن" : "Start Now"}</span>
+            <ArrowRight 
+              className={`w-5 h-5 transition-transform duration-300 group-hover:translate-x-1 ${language === "ar" ? "rotate-180 group-hover:-translate-x-1" : ""}`}
+            />
           </Link>
         </div>
       </div>

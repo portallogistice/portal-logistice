@@ -1,23 +1,45 @@
-// src/components/sections/hero.tsx
 "use client";
 
 import { useI18n } from "@/providers/i18n-provider";
-import { ArrowDown, Bike, TrendingUp, Users, Shield } from "lucide-react";
+import { ArrowRight, TrendingUp, Users, Shield, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 export function HeroSection() {
   const { t, language } = useI18n();
   const [mounted, setMounted] = useState(false);
+
+  // Brand colors from logo
+  const colors = {
+    primary: "#003C7F",
+    secondary: "#00A8E8",
+    accent: "#0080C8",
+  };
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
   const stats = [
-    { icon: TrendingUp, value: "120%", label: language === "ar" ? "عائد الربح" : "Profit Return" },
-    { icon: Users, value: "1000+", label: language === "ar" ? "مستثمر" : "Investors" },
-    { icon: Shield, value: "100%", label: language === "ar" ? "آمن وموثق" : "Secure & Certified" },
+    { 
+      icon: TrendingUp, 
+      value: "120%", 
+      label: language === "ar" ? "عائد الربح" : "Profit Return",
+      color: colors.primary,
+    },
+    { 
+      icon: Users, 
+      value: "1000+", 
+      label: language === "ar" ? "مستثمر" : "Investors",
+      color: colors.secondary,
+    },
+    { 
+      icon: Shield, 
+      value: "100%", 
+      label: language === "ar" ? "آمن وموثق" : "Secure",
+      color: colors.accent,
+    },
   ];
 
   const handleScrollClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -40,195 +62,245 @@ export function HeroSection() {
   return (
     <section
       id="home"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-emerald-50 via-white to-emerald-50 dark:from-gray-900 dark:via-gray-950 dark:to-emerald-950/20 pt-16 sm:pt-20"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-blue-50 via-white to-cyan-50 dark:from-gray-950 dark:via-gray-900 dark:to-blue-950/20 pt-16"
     >
-      {/* Background Image */}
-      <div 
-        className="absolute inset-0 z-0"
+      {/* Optimized Background Pattern */}
+      <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05]" 
         style={{
-          backgroundImage: "url('/images/hero-bg.jpg')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
+          backgroundImage: `radial-gradient(circle at 1px 1px, ${colors.secondary} 1px, transparent 0)`,
+          backgroundSize: '40px 40px'
         }}
-      >
-        {/* Overlay for better text readability */}
-        <div className="absolute inset-0 bg-gradient-to-br from-emerald-50/90 via-white/80 to-emerald-50/90 dark:from-gray-900/95 dark:via-gray-950/90 dark:to-emerald-950/30" />
-      </div>
-
-      {/* Enhanced Background Pattern - Hidden on mobile for performance */}
-      <div className="absolute inset-0 bg-grid-pattern opacity-[0.03] dark:opacity-[0.05] hidden sm:block z-[1]" />
+      />
       
-      {/* Improved Animated Blobs with mobile-optimized positioning */}
-      <div className="absolute top-5 left-0 sm:top-10 sm:left-5 w-64 h-64 sm:w-96 sm:h-96 bg-emerald-200 dark:bg-emerald-900/30 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-40 sm:opacity-60 animate-blob z-[1]" />
-      <div className="absolute top-20 right-0 sm:top-32 sm:right-8 w-56 h-56 sm:w-80 sm:h-80 bg-emerald-300 dark:bg-emerald-800/30 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-40 sm:opacity-60 animate-blob animation-delay-2000 z-[1]" />
-      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 w-48 h-48 sm:w-72 sm:h-72 bg-emerald-200 dark:bg-emerald-900/30 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-30 sm:opacity-50 animate-blob animation-delay-4000 z-[1]" />
+      {/* Optimized Animated Gradients - GPU Accelerated */}
+      <div 
+        className="absolute top-20 -left-20 w-96 h-96 rounded-full blur-3xl opacity-20 animate-float"
+        style={{ 
+          background: `radial-gradient(circle, ${colors.secondary}, transparent)`,
+          willChange: 'transform'
+        }}
+      />
+      <div 
+        className="absolute top-40 -right-20 w-80 h-80 rounded-full blur-3xl opacity-20 animate-float-delayed"
+        style={{ 
+          background: `radial-gradient(circle, ${colors.primary}, transparent)`,
+          willChange: 'transform'
+        }}
+      />
 
-      <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 md:py-20">
-        <div className="text-center max-w-5xl mx-auto">
-          {/* Badge/Icon with mobile-optimized size */}
-          <div 
-            className={`flex justify-center mb-6 sm:mb-8 transition-all duration-1000 ${
-              mounted ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-10"
-            }`}
-            style={{ transitionDelay: "100ms" }}
-          >
-            <div className="relative group">
-              <div className="absolute inset-0 bg-emerald-400 dark:bg-emerald-500 rounded-full blur-xl opacity-50 group-hover:opacity-75 transition-opacity animate-pulse" />
-              <div className="relative p-3 sm:p-4 md:p-5 bg-gradient-to-br from-emerald-100 to-emerald-200 dark:from-emerald-900/40 dark:to-emerald-800/40 rounded-xl sm:rounded-2xl shadow-xl backdrop-blur-sm border border-emerald-200/50 dark:border-emerald-700/50">
-                <Bike className="w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 text-emerald-600 dark:text-emerald-400" />
+      <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <div className="grid lg:grid-cols-2 gap-12 items-center max-w-7xl mx-auto">
+          
+          {/* Left Content */}
+          <div className="text-center lg:text-right rtl:lg:text-right">
+            {/* Badge */}
+            <div 
+              className={`inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white dark:bg-gray-900 shadow-lg border mb-6 transition-all duration-700 ${
+                mounted ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4"
+              }`}
+              style={{ 
+                borderColor: colors.secondary,
+                transitionDelay: "100ms" 
+              }}
+            >
+              <Sparkles className="w-4 h-4" style={{ color: colors.secondary }} />
+              <span className="text-sm font-semibold" style={{ color: colors.primary }}>
+                {language === "ar" ? "استثمار موثق ومضمون" : "Certified Investment"}
+              </span>
+            </div>
+
+            {/* Main Heading */}
+            <h1 
+              className={`text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-6 transition-all duration-700 ${
+                mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+              }`}
+              style={{ transitionDelay: "200ms" }}
+            >
+              <span style={{ color: colors.primary }}>
+                {language === "ar" ? "بوابة التسهيل" : "Portal"}
+              </span>
+              <br />
+              <span 
+                className="bg-clip-text text-transparent bg-gradient-to-r"
+                style={{
+                  backgroundImage: `linear-gradient(135deg, ${colors.secondary} 0%, ${colors.accent} 100%)`
+                }}
+              >
+                {language === "ar" ? "للخدمات اللوجستية" : "Logistics Services"}
+              </span>
+            </h1>
+
+            {/* Subtitle */}
+            <p 
+              className={`text-lg sm:text-xl text-gray-700 dark:text-gray-300 mb-4 leading-relaxed transition-all duration-700 ${
+                mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+              }`}
+              style={{ transitionDelay: "300ms" }}
+            >
+              {t("heroSubtitle")}
+            </p>
+
+            {/* Description */}
+            <p 
+              className={`text-base text-gray-600 dark:text-gray-400 mb-8 leading-relaxed transition-all duration-700 ${
+                mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+              }`}
+              style={{ transitionDelay: "400ms" }}
+            >
+              {language === "ar" 
+                ? "فكرة المشروع الاستثماري هي شراء دراجة نارية وتشغيلها في مجال الخدمات اللوجستية لتسليم الطلبات بهدف تحقيق عائد ربح يتجاوز 120%"
+                : "Investment project to purchase and operate motorcycles in logistics services, achieving profit returns exceeding 120%"}
+            </p>
+
+            {/* CTA Buttons */}
+            <div 
+              className={`flex flex-col sm:flex-row gap-4 justify-center lg:justify-end rtl:lg:justify-end mb-10 transition-all duration-700 ${
+                mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+              }`}
+              style={{ transitionDelay: "500ms" }}
+            >
+              <Link
+                href="#register"
+                onClick={handleScrollClick}
+                className="group relative px-8 py-4 text-white font-bold rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden"
+                style={{
+                  background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.secondary} 100%)`
+                }}
+              >
+                <span className="relative z-10 flex items-center justify-center gap-2">
+                  {t("registerNow")}
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 rtl:group-hover:-translate-x-1 transition-transform" />
+                </span>
+                <div 
+                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                  style={{
+                    background: `linear-gradient(135deg, ${colors.secondary} 0%, ${colors.primary} 100%)`
+                  }}
+                />
+              </Link>
+              
+              <Link
+                href="#steps"
+                onClick={handleScrollClick}
+                className="px-8 py-4 bg-white dark:bg-gray-800 font-bold rounded-xl shadow-lg hover:shadow-xl border-2 transition-all duration-300"
+                style={{ 
+                  color: colors.primary,
+                  borderColor: colors.secondary 
+                }}
+              >
+                {t("learnMore")}
+              </Link>
+            </div>
+
+            {/* Trust Badges */}
+            <div 
+              className={`flex items-center justify-center lg:justify-end rtl:lg:justify-end gap-6 text-sm text-gray-600 dark:text-gray-400 transition-all duration-700 ${
+                mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+              }`}
+              style={{ transitionDelay: "600ms" }}
+            >
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full" style={{ backgroundColor: colors.secondary }} />
+                <span>{language === "ar" ? "موثق رسمياً" : "Officially Certified"}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full" style={{ backgroundColor: colors.secondary }} />
+                <span>{language === "ar" ? "متوافق شرعياً" : "Sharia Compliant"}</span>
               </div>
             </div>
           </div>
 
-          {/* Main Title with mobile-optimized typography */}
-          <h1 
-            className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-bold leading-[1.1] sm:leading-[1.05] mb-4 sm:mb-6 px-2 transition-all duration-1000 ${
-              mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
-            }`}
-            style={{ transitionDelay: "200ms" }}
-          >
-            <span className="block bg-clip-text text-transparent bg-gradient-to-r from-emerald-600 via-emerald-500 to-emerald-700 dark:from-emerald-400 dark:via-emerald-300 dark:to-emerald-500">
-              {t("heroTitle")}
-            </span>
-          </h1>
-
-          {/* Subtitle with mobile-optimized spacing */}
-          <p 
-            className={`text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl text-gray-800 dark:text-gray-200 font-semibold mb-4 sm:mb-6 px-2 transition-all duration-1000 ${
-              mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
-            }`}
-            style={{ transitionDelay: "400ms" }}
-          >
-            {t("heroSubtitle")}
-          </p>
-
-          {/* Description with mobile-optimized readability */}
-          <p 
-            className={`text-sm sm:text-base md:text-lg lg:text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto mb-8 sm:mb-10 md:mb-12 px-4 leading-relaxed sm:leading-loose transition-all duration-1000 ${
-              mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
-            }`}
-            style={{ transitionDelay: "600ms" }}
-          >
-            {language === "ar" 
-              ? "فكرة المشروع الاستثماري هي شراء دراجة نارية وتشغيلها في مجال الخدمات اللوجستية لتسليم الطلبات بهدف تحقيق عائد ربح يتجاوز 120٪"
-              : "The investment project idea is to purchase a motorcycle and operate it in logistics services for order delivery, aiming to achieve a profit return exceeding 120%"}
-          </p>
-
-          {/* Trust Stats - Mobile-optimized grid */}
+          {/* Right Content - Image/Illustration */}
           <div 
-            className={`grid grid-cols-3 gap-2 sm:gap-3 md:gap-4 lg:gap-6 mb-8 sm:mb-10 md:mb-12 max-w-2xl mx-auto px-2 transition-all duration-1000 ${
-              mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+            className={`relative transition-all duration-700 ${
+              mounted ? "opacity-100 translate-x-0" : "opacity-0 translate-x-8"
             }`}
-            style={{ transitionDelay: "800ms" }}
+            style={{ transitionDelay: "300ms" }}
           >
-            {stats.map((stat, index) => {
-              const Icon = stat.icon;
-              return (
-                <div
-                  key={index}
-                  className="group p-3 sm:p-4 md:p-5 lg:p-6 rounded-xl sm:rounded-2xl bg-white/60 dark:bg-gray-900/60 backdrop-blur-md border border-emerald-100/50 dark:border-emerald-900/50 hover:border-emerald-300 dark:hover:border-emerald-700 hover:shadow-lg active:scale-95 transition-all duration-300 hover:-translate-y-1"
+            {/* Main Visual */}
+            <div className="relative aspect-square max-w-lg mx-auto">
+              {/* Decorative Circles */}
+              <div 
+                className="absolute inset-0 rounded-full opacity-20 blur-2xl animate-pulse"
+                style={{ backgroundColor: colors.secondary }}
+              />
+              <div 
+                className="absolute inset-8 rounded-full opacity-10 blur-xl"
+                style={{ backgroundColor: colors.primary }}
+              />
+              
+              {/* Center Icon */}
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div 
+                  className="p-12 rounded-full shadow-2xl"
+                  style={{
+                    background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.secondary} 100%)`
+                  }}
                 >
-                  <div className="flex flex-col items-center gap-1.5 sm:gap-2">
-                    <div className="p-1.5 sm:p-2 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 group-hover:bg-emerald-200 dark:group-hover:bg-emerald-800/30 transition-colors">
-                      <Icon className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-emerald-600 dark:text-emerald-400" />
-                    </div>
-                    <div className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-emerald-600 dark:text-emerald-400 leading-tight">
-                      {stat.value}
-                    </div>
-                    <div className="text-[10px] sm:text-xs md:text-sm text-gray-600 dark:text-gray-400 font-medium text-center leading-tight px-1">
-                      {stat.label}
+                  <svg className="w-40 h-40 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+              </div>
+
+              {/* Floating Stats Cards */}
+              {stats.map((stat, index) => {
+                const Icon = stat.icon;
+                const positions = [
+                  { top: "10%", left: "0%", rotate: "-5deg" },
+                  { top: "50%", right: "0%", rotate: "5deg" },
+                  { bottom: "10%", left: "5%", rotate: "-3deg" },
+                ];
+                return (
+                  <div
+                    key={index}
+                    className="absolute bg-white dark:bg-gray-900 p-4 rounded-2xl shadow-xl border hover:scale-110 transition-transform duration-300"
+                    style={{
+                      ...positions[index],
+                      borderColor: stat.color,
+                      animation: `float ${3 + index}s ease-in-out infinite`,
+                      animationDelay: `${index * 0.5}s`
+                    }}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div 
+                        className="p-2 rounded-lg"
+                        style={{ backgroundColor: `${stat.color}20` }}
+                      >
+                        <Icon className="w-6 h-6" style={{ color: stat.color }} />
+                      </div>
+                      <div>
+                        <div className="text-2xl font-bold" style={{ color: stat.color }}>
+                          {stat.value}
+                        </div>
+                        <div className="text-xs text-gray-600 dark:text-gray-400">
+                          {stat.label}
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Enhanced CTA Buttons - Mobile-optimized */}
-          <div 
-            className={`flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4 mb-12 sm:mb-14 md:mb-16 px-4 transition-all duration-1000 ${
-              mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
-            }`}
-            style={{ transitionDelay: "1000ms" }}
-          >
-            <Link
-              href="#register"
-              onClick={handleScrollClick}
-              className="group relative w-full sm:w-auto min-w-[200px] px-6 sm:px-8 md:px-10 py-3.5 sm:py-4 md:py-5 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-700 hover:to-emerald-600 active:from-emerald-800 active:to-emerald-700 text-white font-bold text-sm sm:text-base md:text-lg rounded-xl sm:rounded-2xl shadow-xl hover:shadow-2xl active:scale-[0.98] transition-all duration-300 transform hover:-translate-y-1 hover:scale-105 overflow-hidden touch-manipulation"
-            >
-              <span className="relative z-10 flex items-center justify-center gap-2">
-                {t("registerNow")}
-                <ArrowDown className="w-4 h-4 sm:w-5 sm:h-5 rotate-[-90deg] group-hover:translate-x-1 transition-transform" />
-              </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-emerald-500 to-emerald-400 opacity-0 group-hover:opacity-100 transition-opacity" />
-            </Link>
-            <Link
-              href="#steps"
-              onClick={handleScrollClick}
-              className="group w-full sm:w-auto min-w-[200px] px-6 sm:px-8 md:px-10 py-3.5 sm:py-4 md:py-5 bg-white/80 dark:bg-gray-800/80 hover:bg-white dark:hover:bg-gray-800 active:bg-gray-50 dark:active:bg-gray-700 text-emerald-600 dark:text-emerald-400 font-bold text-sm sm:text-base md:text-lg rounded-xl sm:rounded-2xl shadow-xl hover:shadow-2xl border-2 border-emerald-600 dark:border-emerald-500 active:scale-[0.98] transition-all duration-300 transform hover:-translate-y-1 hover:scale-105 backdrop-blur-sm touch-manipulation"
-            >
-              <span className="flex items-center justify-center gap-2">
-                {t("learnMore")}
-                <ArrowDown className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-y-1 transition-transform" />
-              </span>
-            </Link>
-          </div>
-
-          {/* Enhanced Scroll Indicator - Mobile-optimized */}
-          <div 
-            className={`transition-all duration-1000 ${
-              mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
-            }`}
-            style={{ transitionDelay: "1200ms" }}
-          >
-            <Link
-              href="#steps"
-              onClick={handleScrollClick}
-              className="group inline-flex flex-col items-center gap-1.5 sm:gap-2 text-gray-500 dark:text-gray-400 hover:text-emerald-600 dark:hover:text-emerald-400 active:text-emerald-700 dark:active:text-emerald-300 transition-colors touch-manipulation"
-              aria-label={language === "ar" ? "انتقل للأسفل" : "Scroll down"}
-            >
-              <span className="text-[10px] sm:text-xs font-medium uppercase tracking-wider">
-                {language === "ar" ? "انتقل للأسفل" : "Scroll"}
-              </span>
-              <div className="relative">
-                <div className="absolute inset-0 bg-emerald-500/20 rounded-full blur-md group-hover:blur-lg transition-all" />
-                <ArrowDown className="relative w-5 h-5 sm:w-6 sm:h-6 animate-bounce" />
-              </div>
-            </Link>
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>
 
       <style jsx>{`
-        @keyframes blob {
-          0%, 100% { 
-            transform: translate(0, 0) scale(1); 
-          }
-          25% { 
-            transform: translate(30px, -60px) scale(1.1); 
-          }
-          50% { 
-            transform: translate(-30px, 30px) scale(0.95); 
-          }
-          75% { 
-            transform: translate(60px, 60px) scale(1.05); 
-          }
+        @keyframes float {
+          0%, 100% { transform: translateY(0px) rotate(var(--rotate, 0deg)); }
+          50% { transform: translateY(-20px) rotate(var(--rotate, 0deg)); }
         }
-        .animate-blob {
-          animation: blob 8s ease-in-out infinite;
+        @keyframes float-delayed {
+          0%, 100% { transform: translate(0, 0); }
+          50% { transform: translate(-20px, -20px); }
         }
-        .animation-delay-2000 {
-          animation-delay: 2s;
+        .animate-float {
+          animation: float 8s ease-in-out infinite;
         }
-        .animation-delay-4000 {
-          animation-delay: 4s;
-        }
-        .bg-grid-pattern {
-          background-image: 
-            linear-gradient(to right, rgba(16, 185, 129, 0.08) 1px, transparent 1px),
-            linear-gradient(to bottom, rgba(16, 185, 129, 0.08) 1px, transparent 1px);
-          background-size: 50px 50px;
+        .animate-float-delayed {
+          animation: float-delayed 10s ease-in-out infinite;
+          animation-delay: 1s;
         }
       `}</style>
     </section>

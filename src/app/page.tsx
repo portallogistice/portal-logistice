@@ -6,11 +6,15 @@ import { AboutSection } from "@/components/sections/about";
 import { FAQSection } from "@/components/sections/faq";
 import { PartnersSection } from "@/components/sections/partners";
 import { Footer } from "@/components/layout/footer";
+import { VideoSection } from "@/components/sections/video";
+import { TestSection } from "@/components/sections/test";
 
 export default function Home() {
   return (
     <>
       <HeroSection />
+      <VideoSection />
+      <TestSection /> 
       <AboutSection />
       <StepsSection />
       <PartnersSection />
