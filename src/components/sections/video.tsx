@@ -17,7 +17,7 @@ export function VideoSection() {
   const [isPlaying, setIsPlaying] = useState(false);
 
   // Replace with your actual video URL
-  const videoUrl = "https://www.youtube.com/embed/YOUR_VIDEO_ID";
+  const videoUrl = "/videos/video.mp4";
 
   const benefits = [
     {

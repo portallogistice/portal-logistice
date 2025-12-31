@@ -4,6 +4,7 @@
 import { useI18n } from "@/providers/i18n-provider";
 import { Handshake, ArrowRight, Building2, Clock, MapPin } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useState, useRef } from "react";
 
 // Brand colors from logo
@@ -38,14 +39,13 @@ export function PartnersSection() {
   }, []);
 
   const partners = [
-    { name: "Jahez", emoji: "🍔" },
-    { name: "HungerStation", emoji: "🍕" },
-    { name: "Mrsool", emoji: "📦" },
-    { name: "ToYou", emoji: "🚚" },
-    { name: "The Chefz", emoji: "👨‍🍳" },
-    { name: "Noon", emoji: "🛍️" },
-    { name: "Careem", emoji: "🚗" },
-    { name: "Uber", emoji: "🚕" },
+    { name: "Jahez", image: "/images/Jahez.jpeg", emoji: "🍔" },
+    { name: "HungerStation", image: "/images/Hungerstation.svg", emoji: "🍕" },
+    { name: "Mrsool", image: "/images/Mrsool.jpeg", emoji: "📦" },
+    { name: "ToYou", image: "/images/Toyou.png", emoji: "🚚" },
+    { name: "Noon", image: "/images/Noon.svg", emoji: "🛍️" },
+    { name: "Careem", image: "/images/Careem.jpeg", emoji: "🚗" },
+    { name: "Uber", image: "/images/Uber.jpeg", emoji: "🚕" },
   ];
 
   const stats = [
@@ -158,9 +158,19 @@ export function PartnersSection() {
                   willChange: isVisible ? 'auto' : 'transform, opacity',
                 }}
               >
-                {/* Emoji Icon */}
-                <div className="text-6xl mb-3 transition-transform duration-300 group-hover:scale-110">
-                  {partner.emoji}
+                {/* Partner Logo/Icon */}
+                <div className="relative w-20 h-20 mb-4 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
+                  {partner.image ? (
+                    <Image
+                      src={partner.image}
+                      alt={partner.name}
+                      width={80}
+                      height={80}
+                      className="object-contain w-full h-full"
+                    />
+                  ) : (
+                    <div className="text-6xl">{partner.emoji}</div>
+                  )}
                 </div>
                 
                 {/* Partner Name */}

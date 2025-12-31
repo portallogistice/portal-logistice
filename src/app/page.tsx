@@ -7,20 +7,23 @@ import { FAQSection } from "@/components/sections/faq";
 import { PartnersSection } from "@/components/sections/partners";
 import { Footer } from "@/components/layout/footer";
 import { VideoSection } from "@/components/sections/video";
-import { TestSection } from "@/components/sections/test";
+import { ROICalculatorSection } from "@/components/sections/roicalculator";
+import { DigitalChatSection } from "@/components/sections/digitalchat";
 
 export default function Home() {
   return (
-    <>
-      <HeroSection />
-      <VideoSection />
-      <TestSection /> 
-      <AboutSection />
-      <StepsSection />
-      <PartnersSection />
-      <FAQSection />
-      <RegisterSection />
-      <Footer />
-    </>
+ 
+ <>
+<HeroSection />
+<VideoSection />
+<ROICalculatorSection /> 
+<DigitalChatSection />
+<AboutSection />
+<StepsSection />
+<PartnersSection />
+<FAQSection />
+<RegisterSection />
+<Footer />
+</>
   );
 }
