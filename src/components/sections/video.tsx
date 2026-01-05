@@ -2,203 +2,372 @@
 "use client";
 
 import { useI18n } from "@/providers/i18n-provider";
-import { useState } from "react";
-import { Play, X, CheckCircle } from "lucide-react";
+import { useState, useRef, useEffect, useCallback } from "react";
+import { Play, X, ChevronLeft, ChevronRight } from "lucide-react";
 
-// Brand colors from logo
+const styles = `
+  @keyframes fadeIn { 
+    from { opacity: 0; } 
+    to { opacity: 1; } 
+  }
+  
+  @keyframes slideUp { 
+    from { opacity: 0; transform: translateY(20px); } 
+    to { opacity: 1; transform: translateY(0); } 
+  }
+  
+  @keyframes scaleIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  
+  .animate-fadeIn { animation: fadeIn 0.3s ease-out forwards; }
+  .animate-slideUp { animation: slideUp 0.4s ease-out forwards; }
+  .animate-scaleIn { animation: scaleIn 0.3s ease-out forwards; }
+  
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+  .video-card-hover {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
+    will-change: transform;
+  }
+  
+  .video-card-hover:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  }
+
+  .gradient-bg {
+    background: linear-gradient(135deg, rgba(0, 60, 127, 0.03) 0%, rgba(0, 168, 232, 0.03) 100%);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+`;
+
 const colors = {
   primary: "#003C7F",
   secondary: "#00A8E8",
   accent: "#0080C8",
 };
 
+const videosData = [
+  {
+    id: 1,
+    titleAr: "نظرة عامة على الاستثمار",
+    titleEn: "Investment Overview",
+    descAr: "شرح شامل لنظام الاستثمار وكيفية تحقيق عائد 120%+",
+    descEn: "Comprehensive explanation of investment system and 120%+ returns",
+    videoUrl: "/videos/video.mp4",
+    duration: "3:45",
+  },
+  {
+    id: 2,
+    titleAr: "خطوات البدء",
+    titleEn: "Getting Started",
+    descAr: "دليل خطوة بخطوة للبدء في استثمارك",
+    descEn: "Step-by-step guide to start your investment",
+    videoUrl: "/videos/video-1.mp4",
+    duration: "2:30",
+  }
+];
+
 export function VideoSection() {
   const { language } = useI18n();
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [selectedVideo, setSelectedVideo] = useState(videosData[0]);
+  const [isMobileFullscreen, setIsMobileFullscreen] = useState(false);
+  const [isVideoReady, setIsVideoReady] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
 
-  // Replace with your actual video URL
-  const videoUrl = "/videos/video.mp4";
+  // Handle video selection with smooth scroll
+  const handleVideoSelect = useCallback((video: typeof videosData[0]) => {
+    setSelectedVideo(video);
+    setIsVideoReady(false);
+    
+    if (window.innerWidth < 768) {
+      setIsMobileFullscreen(true);
+    } else {
+      // Smooth scroll to video on desktop
+      setTimeout(() => {
+        sectionRef.current?.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'start' 
+        });
+      }, 100);
+    }
+  }, []);
 
-  const benefits = [
-    {
-      textAr: "فهم كامل لنظام الاستثمار",
-      textEn: "Complete understanding of investment system",
-    },
-    {
-      textAr: "شرح مفصل لخطوات العمل",
-      textEn: "Detailed explanation of work steps",
-    },
-    {
-      textAr: "أمثلة واقعية من مستثمرين",
-      textEn: "Real examples from investors",
-    },
-  ];
+  // Prevent body scroll when modal is open
+  useEffect(() => {
+    if (isMobileFullscreen) {
+      document.body.style.overflow = "hidden";
+      document.body.style.position = "fixed";
+      document.body.style.width = "100%";
+    } else {
+      document.body.style.overflow = "";
+      document.body.style.position = "";
+      document.body.style.width = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+      document.body.style.position = "";
+      document.body.style.width = "";
+    };
+  }, [isMobileFullscreen]);
+
+  // Handle video loaded
+  const handleVideoLoaded = useCallback(() => {
+    setIsVideoReady(true);
+  }, []);
+
+  // Handle main video click
+  const handleMainVideoClick = useCallback(() => {
+    if (window.innerWidth < 768) {
+      setIsMobileFullscreen(true);
+    } else if (videoRef.current) {
+      if (videoRef.current.paused) {
+        videoRef.current.play().catch(err => console.log('Play prevented:', err));
+      } else {
+        videoRef.current.pause();
+      }
+    }
+  }, []);
+
+  // Navigation between videos
+  const navigateVideo = useCallback((direction: "prev" | "next") => {
+    const currentIndex = videosData.findIndex(v => v.id === selectedVideo.id);
+    const newIndex = direction === "next"
+      ? (currentIndex + 1) % videosData.length
+      : (currentIndex - 1 + videosData.length) % videosData.length;
+    handleVideoSelect(videosData[newIndex]);
+  }, [selectedVideo.id, handleVideoSelect]);
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (isMobileFullscreen) {
+        if (e.key === 'Escape') {
+          setIsMobileFullscreen(false);
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, [isMobileFullscreen]);
 
   return (
-    <section 
-      id="video" 
-      className="relative py-20 lg:py-28 bg-gradient-to-b from-white via-gray-50/30 to-white dark:from-gray-950 dark:via-gray-900/30 dark:to-gray-950"
-    >
-      {/* Optimized Background */}
-      <div className="absolute inset-0 opacity-5 pointer-events-none">
-        <div 
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full blur-3xl"
-          style={{ background: `radial-gradient(circle, ${colors.secondary}, transparent)` }}
-        />
-      </div>
+    <>
+      <style>{styles}</style>
+      <section 
+        ref={sectionRef}
+        id="video" 
+        className="relative py-16 lg:py-24 bg-white dark:bg-gray-950 overflow-hidden"
+      >
+        {/* Optimized Background - Only on large screens */}
+        <div className="absolute inset-0 pointer-events-none opacity-40 dark:opacity-20 hidden lg:block" aria-hidden="true">
+          <div 
+            className="absolute top-24 left-10 w-72 h-72 rounded-full blur-[120px]" 
+            style={{ 
+              background: colors.secondary,
+              willChange: 'transform'
+            }} 
+          />
+          <div 
+            className="absolute bottom-24 right-10 w-72 h-72 rounded-full blur-[120px]" 
+            style={{ 
+              background: colors.primary,
+              willChange: 'transform'
+            }} 
+          />
+        </div>
 
-      <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="max-w-5xl mx-auto">
-          {/* Section Header */}
-          <div className="text-center mb-12">
-            <div 
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6 backdrop-blur-sm"
-              style={{
-                backgroundColor: `${colors.secondary}10`,
-                border: `1px solid ${colors.secondary}20`,
-              }}
-            >
-              <div 
-                className="p-1.5 rounded-full"
-                style={{ backgroundColor: `${colors.secondary}20` }}
-              >
-                <Play className="w-4 h-4" style={{ color: colors.secondary }} />
-              </div>
-              <span 
-                className="text-sm font-bold uppercase tracking-wide"
-                style={{ color: colors.primary }}
-              >
-                {language === "ar" ? "فيديو توضيحي" : "Explainer Video"}
-              </span>
+        <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-6xl mx-auto">
+            
+            {/* Header Section */}
+            <div className="text-center mb-12 lg:mb-20">
+              <h2 className="text-4xl lg:text-6xl font-extrabold tracking-tight mb-6" style={{ color: colors.primary }}>
+                {language === "ar" ? "تعلم كيف تضاعف أرباحك" : "Learn How to Multiply Profits"}
+              </h2>
+              <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                {language === "ar" 
+                  ? "شاهد الفيديوهات التوضيحية لفهم آلية العمل والبدء في رحلتك الاستثمارية"
+                  : "Watch tutorial videos to understand the mechanism and start your investment journey"}
+              </p>
             </div>
-            
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 leading-tight">
-              <span style={{ color: colors.primary }}>
-                {language === "ar" ? "شاهد كيف " : "Watch How "}
-              </span>
-              <span 
-                className="bg-clip-text text-transparent"
-                style={{
-                  backgroundImage: `linear-gradient(135deg, ${colors.secondary} 0%, ${colors.accent} 100%)`,
-                }}
-              >
-                {language === "ar" ? "يعمل النظام" : "It Works"}
-              </span>
-            </h2>
-            
-            <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-              {language === "ar"
-                ? "فيديو توضيحي شامل يشرح نظام الاستثمار وكيفية تحقيق عائد ربح يتجاوز 120%"
-                : "Comprehensive explainer video showing the investment system and how to achieve 120%+ returns"}
-            </p>
-          </div>
 
-          {/* Video Player Container */}
-          <div className="relative mb-12">
-            <div 
-              className="relative aspect-video rounded-2xl overflow-hidden shadow-2xl border-4"
-              style={{ borderColor: colors.secondary }}
-            >
-              {!isPlaying ? (
-                // Video Thumbnail
-                <div 
-                  className="relative w-full h-full bg-gradient-to-br cursor-pointer group"
-                  style={{
-                    background: `linear-gradient(135deg, ${colors.primary}20 0%, ${colors.secondary}20 100%)`,
-                  }}
-                  onClick={() => setIsPlaying(true)}
-                >
-                  {/* Thumbnail Image (if you have one) */}
-                  <div className="absolute inset-0 flex items-center justify-center bg-gray-900/50 backdrop-blur-sm">
-                    <div 
-                      className="w-20 h-20 sm:w-24 sm:h-24 rounded-full flex items-center justify-center shadow-2xl transition-all duration-300 group-hover:scale-110"
-                      style={{
-                        background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.secondary} 100%)`,
-                      }}
-                    >
-                      <Play className="w-10 h-10 sm:w-12 sm:h-12 text-white ml-1" fill="white" />
+            {/* Main Video Feature */}
+            <div className="relative mb-16 group animate-scaleIn">
+              <div 
+                className="relative aspect-video rounded-3xl overflow-hidden shadow-2xl bg-black cursor-pointer transform transition-transform duration-500 lg:hover:scale-[1.01]"
+                onClick={handleMainVideoClick}
+                role="button"
+                tabIndex={0}
+                aria-label={language === "ar" ? "تشغيل الفيديو" : "Play video"}
+                onKeyPress={(e) => e.key === 'Enter' && handleMainVideoClick()}
+              >
+                <video
+                  ref={videoRef}
+                  className="w-full h-full object-cover"
+                  src={selectedVideo.videoUrl}
+                  playsInline
+                  preload="metadata"
+                  onLoadedData={handleVideoLoaded}
+                  aria-label={language === "ar" ? selectedVideo.titleAr : selectedVideo.titleEn}
+                />
+                
+                {/* Play Overlay */}
+                {isVideoReady && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/20 hover:bg-black/10 transition-colors animate-fadeIn">
+                    <div className="w-20 h-20 lg:w-28 lg:h-28 rounded-full flex items-center justify-center backdrop-blur-md bg-white/10 border border-white/20 shadow-2xl transition-transform duration-300 group-hover:scale-110">
+                      <div 
+                        className="w-16 h-16 lg:w-20 lg:h-20 rounded-full flex items-center justify-center shadow-inner"
+                        style={{ background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.secondary} 100%)` }}
+                      >
+                        <Play className="w-8 h-8 lg:w-10 lg:h-10 text-white fill-current translate-x-1" aria-hidden="true" />
+                      </div>
                     </div>
                   </div>
-                  
-                  {/* Play Text */}
-                  <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-center">
-                    <p className="text-white font-bold text-lg sm:text-xl mb-2">
-                      {language === "ar" ? "شاهد الفيديو التوضيحي" : "Watch Explainer Video"}
-                    </p>
-                    <p className="text-white/80 text-sm">
-                      {language === "ar" ? "مدة الفيديو: 3 دقائق" : "Duration: 3 minutes"}
+                )}
+              </div>
+
+              {/* Video Info */}
+              <div className="mt-8 flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4">
+                <h3 className="text-2xl lg:text-3xl font-bold" style={{ color: colors.primary }}>
+                  {language === "ar" ? selectedVideo.titleAr : selectedVideo.titleEn}
+                </h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  {language === "ar" ? selectedVideo.descAr : selectedVideo.descEn}
+                </p>
+              </div>
+            </div>
+
+            {/* Section Divider */}
+            <div className="mb-8 flex items-center gap-4">
+              <div className="h-px flex-1 bg-gray-200 dark:bg-gray-800" />
+              <h4 className="text-sm lg:text-base font-black uppercase tracking-[0.2em] text-gray-400 dark:text-gray-500 whitespace-nowrap">
+                {language === "ar" ? "اختر فيديو آخر للمشاهدة" : "Choose another video"}
+              </h4>
+              <div className="h-px flex-1 bg-gray-200 dark:bg-gray-800" />
+            </div>
+
+            {/* Video Playlist */}
+            <div className="flex gap-6 overflow-x-auto no-scrollbar pb-10 -mx-4 px-4 lg:grid lg:grid-cols-2 lg:mx-0 lg:px-0 lg:overflow-visible">
+              {videosData.map((video, index) => (
+                video.id!== selectedVideo.id && (
+                <div
+                  key={video.id}
+                  onClick={() => handleVideoSelect(video)}
+                  onKeyPress={(e) => e.key === 'Enter' && handleVideoSelect(video)}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`${language === "ar" ? "مشاهدة" : "Watch"} ${language === "ar" ? video.titleAr : video.titleEn}`}
+                  className={`video-card-hover flex-shrink-0 w-[80vw] lg:w-full group cursor-pointer rounded-2xl overflow-hidden border-2 transition-all animate-slideUp ${
+                    selectedVideo.id === video.id 
+                      ? "border-sky-500 ring-4 ring-sky-500/10" 
+                      : "border-transparent bg-slate-50 dark:bg-gray-900"
+                  }`}
+                  style={{ animationDelay: `${index * 100}ms` }}
+                >
+                  <div className="relative aspect-video bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-800 dark:to-gray-900">
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <div className="p-3 rounded-full bg-white/20 backdrop-blur-md">
+                        <Play className="w-6 h-6 text-white fill-current" aria-hidden="true" />
+                      </div>
+                    </div>
+                    <div className="absolute bottom-3 right-3 px-2 py-1 rounded bg-black/70 text-white text-[10px] font-bold backdrop-blur-sm">
+                      {video.duration}
+                    </div>
+                  </div>
+                  <div className="p-5">
+                    <h5 className="font-bold text-base mb-1 truncate" style={{ color: colors.primary }}>
+                      {language === "ar" ? video.titleAr : video.titleEn}
+                    </h5>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-1">
+                      {language === "ar" ? video.descAr : video.descEn}
                     </p>
                   </div>
                 </div>
-              ) : (
-                // YouTube/Video Player
-                <div className="relative w-full h-full">
-                  <iframe
-                    src={videoUrl}
-                    title="Investment System Explainer"
-                    className="absolute inset-0 w-full h-full"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  />
-                  
-                  {/* Close Button */}
-                  <button
-                    onClick={() => setIsPlaying(false)}
-                    className="absolute top-4 right-4 rtl:right-auto rtl:left-4 w-10 h-10 rounded-full bg-black/50 hover:bg-black/70 flex items-center justify-center transition-all z-10"
-                  >
-                    <X className="w-6 h-6 text-white" />
-                  </button>
-                </div>
-              )}
+                )
+              ))}
+            </div>
+
+            {/* CTA Button */}
+            <div className="mt-12 text-center animate-slideUp" style={{ animationDelay: '300ms' }}>
+              <a 
+                href="#register" 
+                className="group inline-flex items-center gap-4 px-10 py-5 text-white font-bold text-xl rounded-2xl shadow-2xl transition-all hover:shadow-sky-500/20 hover:scale-105 active:scale-95"
+                style={{ background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.secondary} 100%)` }}
+              >
+                <span>{language === "ar" ? "ابدأ استثمارك الآن" : "Start Your Investment Now"}</span>
+                <ChevronRight 
+                  className={`w-6 h-6 transition-transform group-hover:translate-x-1 ${language === "ar" ? "rotate-180 group-hover:-translate-x-1" : ""}`} 
+                  aria-hidden="true"
+                />
+              </a>
             </div>
           </div>
+        </div>
 
-          {/* Benefits Grid */}
-          <div className="grid sm:grid-cols-3 gap-6">
-            {benefits.map((benefit, index) => (
-              <div
-                key={index}
-                className="flex items-start gap-3 p-5 rounded-2xl bg-white dark:bg-gray-900 border-2 transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
-                style={{ borderColor: `${colors.secondary}20` }}
-              >
-                <div 
-                  className="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center mt-0.5"
-                  style={{ backgroundColor: `${colors.secondary}20` }}
+        {/* Mobile Fullscreen Modal */}
+        {isMobileFullscreen && (
+          <div 
+            className="fixed inset-0 z-[9999] bg-black animate-fadeIn md:hidden"
+            role="dialog"
+            aria-modal="true"
+            aria-label={language === "ar" ? "مشغل الفيديو" : "Video player"}
+          >
+            <div className="relative w-full h-full flex flex-col">
+              {/* Header */}
+              <div className="flex items-center justify-between p-5 bg-gradient-to-b from-black/90 to-transparent absolute top-0 left-0 right-0 z-50">
+                <button 
+                  onClick={() => setIsMobileFullscreen(false)}
+                  className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-lg flex items-center justify-center text-white active:scale-95 transition-transform"
+                  aria-label={language === "ar" ? "إغلاق" : "Close"}
                 >
-                  <CheckCircle className="w-4 h-4" style={{ color: colors.secondary }} />
-                </div>
-                <p 
-                  className="text-sm font-semibold leading-relaxed"
-                  style={{ color: colors.primary }}
-                >
-                  {language === "ar" ? benefit.textAr : benefit.textEn}
+                  <X className="w-7 h-7" />
+                </button>
+                <span className="text-white font-bold text-sm tracking-tight truncate max-w-[60%]">
+                  {language === "ar" ? selectedVideo.titleAr : selectedVideo.titleEn}
+                </span>
+                <div className="w-12" aria-hidden="true" />
+              </div>
+              
+              {/* Video Player */}
+              <div className="flex-1 flex items-center justify-center bg-black">
+                <video 
+                  className="w-full h-auto max-h-full" 
+                  src={selectedVideo.videoUrl} 
+                  controls 
+                  autoPlay 
+                  playsInline
+                  controlsList="nodownload"
+                  aria-label={language === "ar" ? selectedVideo.titleAr : selectedVideo.titleEn}
+                />
+              </div>
+              
+              {/* Video Info Footer */}
+              <div className="p-8 bg-gray-900 border-t border-white/5">
+                <h4 className="text-xl font-bold text-white mb-3">
+                  {language === "ar" ? selectedVideo.titleAr : selectedVideo.titleEn}
+                </h4>
+                <p className="text-gray-400 leading-relaxed">
+                  {language === "ar" ? selectedVideo.descAr : selectedVideo.descEn}
                 </p>
               </div>
-            ))}
+            </div>
           </div>
-
-          {/* CTA */}
-          <div className="text-center mt-12">
-            <p className="text-gray-600 dark:text-gray-400 mb-6">
-              {language === "ar" 
-                ? "هل أنت مستعد لبدء استثمارك؟"
-                : "Ready to start your investment?"}
-            </p>
-            <a
-              href="#register"
-              className="inline-flex items-center gap-2 px-8 py-4 text-white font-bold rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
-              style={{
-                background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.secondary} 100%)`,
-              }}
-            >
-              <span>{language === "ar" ? "سجل الآن" : "Register Now"}</span>
-              <svg className="w-5 h-5 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
+        )}
+      </section>
+    </>
   );
 }

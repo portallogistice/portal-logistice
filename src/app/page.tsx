@@ -9,6 +9,7 @@ import { Footer } from "@/components/layout/footer";
 import { VideoSection } from "@/components/sections/video";
 import { ROICalculatorSection } from "@/components/sections/roicalculator";
 import { DigitalChatSection } from "@/components/sections/digitalchat";
+import { ReportsSection } from "@/components/sections/report";
 
 export default function Home() {
   return (
@@ -22,6 +23,7 @@ export default function Home() {
 <StepsSection />
 <PartnersSection />
 <FAQSection />
+<ReportsSection />
 <RegisterSection />
 <Footer />
 </>
