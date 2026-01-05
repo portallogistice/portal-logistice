@@ -117,6 +117,7 @@ export default function ReportDetailPage({
   const {language} = useI18n();
   const [activeSection, setActiveSection] = useState<number | null>(null);
   const [isSticky, setIsSticky] = useState(false);
+  
   useEffect(() => {
     const handleScroll = () => {
       setIsSticky(window.scrollY > 100);
@@ -129,6 +130,34 @@ export default function ReportDetailPage({
   const handleBack = () => {
     window.history.back();
   };
+
+  // Handle case when report is not found
+  if (!reportData) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-50 dark:from-gray-950 dark:via-blue-950/20 dark:to-gray-950 flex items-center justify-center">
+        <div className="text-center p-8">
+          <FileText className="w-16 h-16 mx-auto mb-4 text-gray-400" />
+          <h1 className="text-2xl font-bold mb-4" style={{ color: colors.primary }}>
+            {language === "ar" ? "التقرير غير موجود" : "Report Not Found"}
+          </h1>
+          <p className="text-gray-600 dark:text-gray-400 mb-6">
+            {language === "ar" ? "التقرير المطلوب غير موجود أو تم حذفه." : "The requested report could not be found or has been removed."}
+          </p>
+          <button
+            onClick={handleBack}
+            className="flex items-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all hover:scale-105 active:scale-95 mx-auto"
+            style={{
+              color: colors.primary,
+              backgroundColor: `${colors.secondary}15`,
+            }}
+          >
+            <ArrowRight className={`w-5 h-5 ${language === "ar" ? "" : "rotate-180"}`} />
+            <span>{language === "ar" ? "العودة" : "Go Back"}</span>
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
