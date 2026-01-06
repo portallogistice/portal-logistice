@@ -53,6 +53,7 @@ export async function POST(request: NextRequest) {
       spreadsheetId,
       range: 'Registrations!A:E', // Sheet name + columns
       valueInputOption: 'USER_ENTERED',
+      insertDataOption: 'INSERT_ROWS',
       requestBody: {
         values: [[
           fullName,
