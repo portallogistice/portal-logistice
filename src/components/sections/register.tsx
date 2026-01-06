@@ -5,7 +5,6 @@ import { useI18n } from "@/providers/i18n-provider";
 import { useState } from "react";
 import { User, MapPin, Phone, Clock, Send, CheckCircle2, Sparkles } from "lucide-react";
 
-// Brand colors from logo
 const colors = {
   primary: "#003C7F",
   secondary: "#00A8E8",
@@ -22,20 +21,91 @@ export function RegisterSection() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [error, setError] = useState("");
+  const [phoneError, setPhoneError] = useState("");
+
+  // Validate Saudi phone number (starts with 05, 10 digits total)
+  const validatePhone = (phone: string): boolean => {
+    // Remove any spaces, dashes, or other characters
+    const cleanedPhone = phone.replace(/[\s\-\(\)]/g, '');
+    
+    // Check if it starts with 05 and has exactly 10 digits
+    const phoneRegex = /^05\d{8}$/;
+    
+    if (!cleanedPhone) {
+      setPhoneError(language === "ar" ? "رقم الهاتف مطلوب" : "Phone number is required");
+      return false;
+    }
+    
+    if (!phoneRegex.test(cleanedPhone)) {
+      setPhoneError(language === "ar" ? "يرجى إدخال رقم هاتف صحيح (يبدأ بـ 05 ويتكون من 10 أرقام)" : "Please enter a valid phone number (starts with 05, 10 digits)");
+      return false;
+    }
+    
+    setPhoneError("");
+    return true;
+  };
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    // Only allow numbers
+    const numericValue = value.replace(/\D/g, '');
+    
+    // Limit to 10 digits
+    const limitedValue = numericValue.slice(0, 10);
+    
+    setFormData({ ...formData, phone: limitedValue });
+    
+    // Clear error when user starts typing
+    if (phoneError) {
+      setPhoneError("");
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError("");
+    setPhoneError("");
+    
+    // Validate phone number before submission
+    if (!validatePhone(formData.phone)) {
+      return;
+    }
+    
     setIsSubmitting(true);
     
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    setIsSubmitting(false);
-    setIsSuccess(true);
-    
-    setTimeout(() => {
-      setFormData({ fullName: "", city: "", phone: "", callTime: "" });
-      setIsSuccess(false);
-    }, 3000);
+    try {
+      // Send data to your backend API
+      const response = await fetch('/api/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...formData,
+          timestamp: new Date().toISOString(),
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to submit registration');
+      }
+
+      const result = await response.json();
+      console.log('Registration saved:', result);
+      
+      setIsSuccess(true);
+      
+      setTimeout(() => {
+        setFormData({ fullName: "", city: "", phone: "", callTime: "" });
+        setIsSuccess(false);
+      }, 3000);
+    } catch (err) {
+      setError(language === "ar" ? "حدث خطأ. يرجى المحاولة مرة أخرى." : "An error occurred. Please try again.");
+      console.error('Registration error:', err);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const callTimes = [
@@ -54,7 +124,6 @@ export function RegisterSection() {
       id="register" 
       className="relative py-20 lg:py-28 bg-gradient-to-b from-blue-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900"
     >
-      {/* Optimized Background */}
       <div className="absolute inset-0 opacity-5 pointer-events-none">
         <div 
           className="absolute top-0 left-0 w-96 h-96 rounded-full blur-3xl"
@@ -68,7 +137,6 @@ export function RegisterSection() {
 
       <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-2xl mx-auto">
-          {/* Section Header */}
           <div className="text-center mb-12">
             <div 
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6 backdrop-blur-sm"
@@ -112,7 +180,6 @@ export function RegisterSection() {
             </p>
           </div>
 
-          {/* Form Card */}
           <div 
             className="relative bg-white dark:bg-gray-900 rounded-2xl border-2 shadow-2xl p-8 lg:p-10"
             style={{ borderColor: `${colors.secondary}20` }}
@@ -141,7 +208,12 @@ export function RegisterSection() {
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-6">
-                {/* Full Name */}
+                {error && (
+                  <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl text-red-600 dark:text-red-400 text-sm">
+                    {error}
+                  </div>
+                )}
+
                 <div>
                   <label 
                     className="flex items-center gap-2 text-sm font-bold mb-2"
@@ -157,16 +229,13 @@ export function RegisterSection() {
                     value={formData.fullName}
                     onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
                     className="w-full px-4 py-3 rounded-xl border-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-white transition-all focus:outline-none"
-                    style={{
-                      borderColor: "#e5e7eb",
-                    }}
+                    style={{ borderColor: "#e5e7eb" }}
                     onFocus={(e) => e.target.style.borderColor = colors.secondary}
                     onBlur={(e) => e.target.style.borderColor = "#e5e7eb"}
                     placeholder={language === "ar" ? "أدخل اسمك الكامل" : "Enter your full name"}
                   />
                 </div>
 
-                {/* City */}
                 <div>
                   <label 
                     className="flex items-center gap-2 text-sm font-bold mb-2"
@@ -182,16 +251,13 @@ export function RegisterSection() {
                     value={formData.city}
                     onChange={(e) => setFormData({ ...formData, city: e.target.value })}
                     className="w-full px-4 py-3 rounded-xl border-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-white transition-all focus:outline-none"
-                    style={{
-                      borderColor: "#e5e7eb",
-                    }}
+                    style={{ borderColor: "#e5e7eb" }}
                     onFocus={(e) => e.target.style.borderColor = colors.secondary}
                     onBlur={(e) => e.target.style.borderColor = "#e5e7eb"}
                     placeholder={language === "ar" ? "أدخل مدينتك" : "Enter your city"}
                   />
                 </div>
 
-                {/* Phone */}
                 <div>
                   <label 
                     className="flex items-center gap-2 text-sm font-bold mb-2"
@@ -205,18 +271,36 @@ export function RegisterSection() {
                     type="tel"
                     required
                     value={formData.phone}
-                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    className="w-full px-4 py-3 rounded-xl border-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-white transition-all focus:outline-none"
-                    style={{
-                      borderColor: "#e5e7eb",
+                    onChange={handlePhoneChange}
+                    onBlur={(e) => {
+                      e.target.style.borderColor = phoneError ? "#ef4444" : "#e5e7eb";
+                      validatePhone(formData.phone);
                     }}
-                    onFocus={(e) => e.target.style.borderColor = colors.secondary}
-                    onBlur={(e) => e.target.style.borderColor = "#e5e7eb"}
+                    className="w-full px-4 py-3 rounded-xl border-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-white transition-all focus:outline-none"
+                    style={{ 
+                      borderColor: phoneError ? "#ef4444" : "#e5e7eb"
+                    }}
+                    onFocus={(e) => {
+                      e.target.style.borderColor = colors.secondary;
+                      setPhoneError("");
+                    }}
                     placeholder="05xxxxxxxx"
+                    maxLength={10}
+                    inputMode="numeric"
                   />
+                  {phoneError && (
+                    <p className="mt-2 text-sm text-red-600 dark:text-red-400 flex items-center gap-1">
+                      <span>⚠</span>
+                      {phoneError}
+                    </p>
+                  )}
+                  {!phoneError && formData.phone && (
+                    <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                      {language === "ar" ? "مثال: 0512345678" : "Example: 0512345678"}
+                    </p>
+                  )}
                 </div>
 
-                {/* Call Time */}
                 <div>
                   <label 
                     className="flex items-center gap-2 text-sm font-bold mb-2"
@@ -231,9 +315,7 @@ export function RegisterSection() {
                     value={formData.callTime}
                     onChange={(e) => setFormData({ ...formData, callTime: e.target.value })}
                     className="w-full px-4 py-3 rounded-xl border-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-white transition-all focus:outline-none"
-                    style={{
-                      borderColor: "#e5e7eb",
-                    }}
+                    style={{ borderColor: "#e5e7eb" }}
                     onFocus={(e) => e.target.style.borderColor = colors.secondary}
                     onBlur={(e) => e.target.style.borderColor = "#e5e7eb"}
                   >
@@ -248,7 +330,6 @@ export function RegisterSection() {
                   </select>
                 </div>
 
-                {/* Submit Button */}
                 <button
                   type="submit"
                   disabled={isSubmitting}
@@ -273,7 +354,6 @@ export function RegisterSection() {
             )}
           </div>
 
-          {/* Trust Indicators */}
           <div className="mt-8 flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600 dark:text-gray-400">
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full" style={{ backgroundColor: colors.secondary }} />

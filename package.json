@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/nasser1207/portal-logistice#readme",
   "dependencies": {
+    "googleapis": "^169.0.0",
     "lucide-react": "^0.562.0",
     "next": "^16.1.1",
     "react": "^19.2.3",
