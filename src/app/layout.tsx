@@ -6,6 +6,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/providers/theme-provider";
 import { I18nProvider } from "@/providers/i18n-provider";
 import { Header } from "@/components/layout/header";
+import { WhatsAppButton } from "@/components/layout/whatsapp-button";
 
 // Arabic font
 const cairo = Cairo({
@@ -74,7 +75,8 @@ export default function RootLayout({
         <ThemeProvider>
           <I18nProvider>
             <Header />
-            <main className="w-full overflow-x-hidden">{children}</main>
+            <main className="w-full  overflow-x-hidden">{children}</main>
+            <WhatsAppButton />
           </I18nProvider>
         </ThemeProvider>
         

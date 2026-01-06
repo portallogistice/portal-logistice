@@ -203,15 +203,7 @@ export function DigitalChatSection({ language = "ar" }: DigitalChatSectionProps)
             {/* Text Content Side */}
             <div className="text-center lg:text-right space-y-6">
               {/* Badge */}
-              <div 
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white dark:bg-gray-900 shadow-lg border"
-                style={{ borderColor: colors.secondary }}
-              >
-                <Sparkles className="w-4 h-4" style={{ color: colors.secondary }} aria-hidden="true" />
-                <span className="text-sm font-semibold" style={{ color: colors.primary }}>
-                  {t.badge}
-                </span>
-              </div>
+          
 
               {/* Main Heading */}
               <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight">

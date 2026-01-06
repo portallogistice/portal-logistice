@@ -43,9 +43,7 @@ export function PartnersSection() {
     { name: "HungerStation", image: "/images/Hungerstation.svg", emoji: "🍕" },
     { name: "Mrsool", image: "/images/Mrsool.jpeg", emoji: "📦" },
     { name: "ToYou", image: "/images/Toyou.png", emoji: "🚚" },
-    { name: "Noon", image: "/images/Noon.svg", emoji: "🛍️" },
-    { name: "Careem", image: "/images/Careem.jpeg", emoji: "🚗" },
-    { name: "Uber", image: "/images/Uber.jpeg", emoji: "🚕" },
+    { name: "Noon", image: "/images/Noon.svg", emoji: "🛍️" }
   ];
 
   const stats = [

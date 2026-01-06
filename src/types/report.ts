@@ -44,8 +44,9 @@ export interface ReportData {
   titleAr: string;
   titleEn: string;
   category: string;
+  
   date: string;
-  author: string;
+    author: string;
   authorEn: string;
   readTime: string;
   readTimeEn: string;

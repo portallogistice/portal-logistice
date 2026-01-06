@@ -105,14 +105,14 @@ export function Header() {
 
             {/* Desktop Navigation */}
             <nav className="hidden lg:flex items-center space-x-1 rtl:space-x-reverse">
-              {["home", "steps", "register", "about", "faq", "products"].map((item) => (
+              {["home", "steps", "register", "about","offers","partners", "faq", "reports"].map((item) => (
                 <Link
                   key={item}
-                  href={`#${item}`}
+                  href={`/#${item}`}
                   onClick={handleLinkClick}
                   className="relative px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 transition-all rounded-lg group overflow-hidden"
-                >
-                  <span className="relative z-10 group-hover:text-white dark:group-hover:text-white transition-colors">
+                  >
+                    <span className="relative z-10 group-hover:text-white dark:group-hover:text-white transition-colors">
                     {t(item)}
                   </span>
                   {/* Hover background with gradient */}
@@ -243,10 +243,10 @@ export function Header() {
         }`}
       >
         <nav className="container mx-auto px-4 py-6 flex flex-col space-y-1">
-          {["home", "steps", "register", "about", "faq", "products"].map((item, index) => (
+          {["home", "steps", "register", "about", "offers", "partners", "faq", "reports"].map((item, index) => (
             <Link
               key={item}
-              href={`#${item}`}
+              href={`/#${item}`}
               onClick={handleLinkClick}
               className={`text-lg font-medium py-3 px-4 rounded-lg border-b transition-all relative overflow-hidden group ${
                 mobileMenuOpen ? "opacity-100 translate-x-0" : "opacity-0 translate-x-4"
@@ -272,7 +272,7 @@ export function Header() {
 
           {/* Mobile CTA */}
           <Link
-            href="#register"
+            href="/#register"
             onClick={handleLinkClick}
             className={`mt-4 w-full text-center px-6 py-3 rounded-lg text-white font-bold shadow-lg transition-all ${
               mobileMenuOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"

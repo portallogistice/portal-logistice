@@ -24,7 +24,8 @@ const translations: Record<Language, Record<string, string>> = {
     register: "تسجيل",
     about: "من نحن",
     faq: "الأسئلة الشائعة",
-    products: "المنتجات",
+    reports: "التقارير",
+    offers: "برامج الاستثمار",
     partners: "شركاؤنا",
     
     // Hero Section
@@ -62,7 +63,8 @@ const translations: Record<Language, Record<string, string>> = {
     register: "Register",
     about: "About Us",
     faq: "FAQ",
-    products: "Products",
+    reports: "Reports",
+    offers: "Investment Programs",
     partners: "Partners",
     
     // Hero Section

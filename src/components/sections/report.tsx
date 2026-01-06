@@ -224,7 +224,6 @@ export  function ReportsSection({ language = "ar" }: ReportsSectionProps) {
         {/* Reports Grid */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
           {paginatedReports.map((report, index) => {
-            const Icon = report.icon;
             const isVisible = visibleCards.has(index);
 
             return (
@@ -248,7 +247,6 @@ export  function ReportsSection({ language = "ar" }: ReportsSectionProps) {
                       background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.secondary} 100%)`,
                     }}
                   >
-                    <Icon className="w-6 h-6 text-white" />
                   </div>
 
                   {/* Content */}

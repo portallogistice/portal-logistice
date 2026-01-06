@@ -27,7 +27,7 @@ export function ROICalculatorSection() {
   const smartRevenue = 26920 * bikeCount;
   const smartCosts = 5250 * bikeCount;
   const smartNetProfit = 21760 * bikeCount;
-  const smartROI = 330;
+  const smartROI = 360;
   
   const profitDifference = smartNetProfit - tradNetProfit;
   const dailyIncome = Math.floor(smartNetProfit / (3 * 365));
@@ -150,7 +150,7 @@ export function ROICalculatorSection() {
                       {language === "ar" ? "مدة الاستثمار" : "Investment Period"}
                     </h4>
                     <p className="text-xs text-gray-600 dark:text-gray-400">
-                      {language === "ar" ? "3 سنوات (حسب التقرير)" : "3 Years (Per Report)"}
+                      {language === "ar" ? "3 سنوات" : "3 Years"}
                     </p>
                   </div>
                 </div>
@@ -166,7 +166,7 @@ export function ROICalculatorSection() {
                 <p className="text-white text-3xl font-bold">
                   {dailyIncome.toLocaleString()}
                   <span className="text-lg font-normal ml-1">
-                    {language === "ar" ? "ريال" : "SAR"}
+                    {language === "ar" ? " ريال" : "SAR"}
                   </span>
                 </p>
                 <p className="text-white/70 text-xs mt-2">
@@ -279,7 +279,7 @@ export function ROICalculatorSection() {
                   {language === "ar" ? "عائد الاستثمار" : "ROI"}
                 </span>
                 <span className="text-2xl font-bold">
-                  +{smartROI}%
+                  {smartROI}%
                 </span>
               </div>
 
@@ -291,7 +291,7 @@ export function ROICalculatorSection() {
                   color: colors.primary,
                 }}
               >
-                🎯 {language === "ar" ? "أرباح إضافية:" : "Extra Profit:"} +{profitDifference.toLocaleString()} {language === "ar" ? "ريال" : "SAR"}
+                {language === "ar" ? "أرباح إضافية:" : "Extra Profit:"} +{profitDifference.toLocaleString()} {language === "ar" ? "ريال" : "SAR"}
               </div>
             </div>
           </div>
