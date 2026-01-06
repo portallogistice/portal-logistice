@@ -63,12 +63,12 @@ export  function ReportsSection({ language = "ar" }: ReportsSectionProps) {
 
   // Filter reports
   const filteredReports = reportsData.filter((report) => {
-    const matchesCategory = selectedCategory === "all" || report.category === selectedCategory;
+      const matchesCategory = selectedCategory === "all" || report.department === selectedCategory;
     const matchesSearch = 
-      (language === "ar" ? report.titleAr : report.titleEn)
+      ( report.title) 
         .toLowerCase()
         .includes(searchQuery.toLowerCase()) ||
-      (language === "ar" ? report.summaryAr : report.summaryEn)
+      (report.subtitle)
         .toLowerCase()
         .includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
@@ -254,21 +254,21 @@ export  function ReportsSection({ language = "ar" }: ReportsSectionProps) {
                     className="text-lg font-bold mb-2 line-clamp-2"
                     style={{ color: colors.primary }}
                   >
-                    {language === "ar" ? report.titleAr : report.titleEn}
+                    {report.title}
                   </h3>
 
                   <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 line-clamp-2">
-                    {language === "ar" ? report.summaryAr : report.summaryEn}
+                    {report.subtitle}
                   </p>
 
                   {/* Footer */}
                   <div className="flex items-center justify-between pt-4 border-t" style={{ borderColor: `${colors.secondary}20` }}>
                     <div className="flex items-center gap-2 text-xs text-gray-500">
                       <Calendar className="w-4 h-4" />
-                      <span>{new Date(report.date).toLocaleDateString(language === "ar" ? "ar-SA" : "en-US")}</span>
+                      <span>{report.department}</span>
                     </div>
 <div className="flex items-center gap-2">
-                <button onClick={() => setSelectedReport(report)} className="cursor-pointer">
+                <button onClick={() => router.push(`/reports/${report.id}`)} className="cursor-pointer">
                         <div className="w-10 h-10 rounded-lg flex items-center justify-center transition-transform duration-300 group-hover:scale-110"
                     style={{
                       background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.secondary} 100%)`,

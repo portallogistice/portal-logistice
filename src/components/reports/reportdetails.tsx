@@ -5,29 +5,19 @@ import {
   Calendar, 
   Download, 
   Share2, 
-  FileText, 
   ChevronLeft, 
-  Clock, 
   Printer, 
   Mail, 
   Quote, 
   TrendingUp, 
   Award, 
   ShieldCheck,
-  ChevronRight
+  ChevronRight,
+  CheckCircle2
 } from "lucide-react";
-import { useI18n } from "@/providers/i18n-provider";
 import { reportsData } from "@/lib/reportsData";
 
-// الألوان المعتمدة
-const colors = {
-  primary: "#003C7F",
-  secondary: "#00A8E8",
-  accent: "#0080C8",
-};
-
-export default function ReportDetailPage({ reportId }: { reportId: number }) {
-  const { language } = useI18n();
+export default function ReportDetailPage({ reportId, language = "ar" }: { reportId: number, language?: string }) {
   const reportData = reportsData.find((report) => report.id === reportId);
   const isRtl = language === "ar";
 
@@ -38,7 +28,7 @@ export default function ReportDetailPage({ reportId }: { reportId: number }) {
   );
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] dark:bg-gray-950 pb-20">
+    <div className="min-h-screen bg-[#F8FAFC] dark:bg-gray-950 pb-20" dir={isRtl ? "rtl" : "ltr"}>
       {/* Navigation Bar */}
       <div className="sticky top-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
@@ -51,8 +41,12 @@ export default function ReportDetailPage({ reportId }: { reportId: number }) {
           </button>
           
           <div className="flex items-center gap-2">
-            <button className="p-2 hover:bg-gray-100 rounded-full transition-colors"><Share2 className="w-5 h-5 text-gray-500" /></button>
-            <button className="p-2 hover:bg-gray-100 rounded-full transition-colors" onClick={() => window.print()}><Printer className="w-5 h-5 text-gray-500" /></button>
+            <button className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors">
+              <Share2 className="w-5 h-5 text-gray-500" />
+            </button>
+            <button className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors" onClick={() => window.print()}>
+              <Printer className="w-5 h-5 text-gray-500" />
+            </button>
           </div>
         </div>
       </div>
@@ -62,19 +56,23 @@ export default function ReportDetailPage({ reportId }: { reportId: number }) {
           
           {/* Header Section */}
           <header className="mb-12 text-center lg:text-right">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-sm font-bold mb-6">
-              <reportData.icon className="w-4 h-4" />
-              {isRtl ? reportData.authorAr : reportData.authorEn}
+            <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r ${reportData.color} text-white text-sm font-bold mb-6 shadow-lg`}>
+              <span className="text-2xl">{reportData.icon}</span>
+              <span>{reportData.department}</span>
             </div>
             
-            <h1 className="text-3xl md:text-5xl font-extrabold text-slate-900 dark:text-white mb-6 leading-tight">
-              {isRtl ? reportData.titleAr : reportData.titleEn}
+            <h1 className="text-3xl md:text-5xl font-extrabold text-slate-900 dark:text-white mb-4 leading-tight">
+              {reportData.title}
             </h1>
+            
+            <p className="text-xl text-gray-600 dark:text-gray-400 mb-8 font-medium">
+              {reportData.subtitle}
+            </p>
 
             <div className="flex flex-wrap items-center justify-center lg:justify-start gap-6 text-gray-500 dark:text-gray-400 border-y border-gray-200 dark:border-gray-800 py-6">
               <div className="flex items-center gap-2">
                 <Calendar className="w-5 h-5 text-blue-500" />
-                <span>{new Date(reportData.date).toLocaleDateString(isRtl ? 'ar-SA' : 'en-US')}</span>
+                <span>{new Date().toLocaleDateString('ar-SA')}</span>
               </div>
               <div className="flex items-center gap-2">
                 <ShieldCheck className="w-5 h-5 text-blue-500" />
@@ -87,72 +85,91 @@ export default function ReportDetailPage({ reportId }: { reportId: number }) {
             </div>
           </header>
 
-          {/* Key Highlights Grid - جديد بناءً على البيانات */}
-          {reportData.highlights && (
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
-              {reportData.highlights.map((item, i) => (
-                <div key={i} className="bg-white dark:bg-gray-900 p-4 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm text-center">
-                  <item.icon className="w-6 h-6 mx-auto mb-2 text-blue-500" />
-                  <div className="text-lg font-bold text-slate-900 dark:text-white">{isRtl ? item.valueAr : item.valueEn}</div>
-                  <div className="text-xs text-gray-500">{isRtl ? item.titleAr : item.titleEn}</div>
-                </div>
-              ))}
-            </div>
-          )}
-
           {/* Report Content */}
-          <div className={`prose prose-lg max-w-none dark:prose-invert ${isRtl ? 'font-arabic' : ''}`}>
+          <div className="prose prose-lg max-w-none dark:prose-invert">
             
-            {/* Strategy Summary Box */}
-            <div className="relative p-8 rounded-3xl bg-gradient-to-br from-[#003C7F] to-[#00A8E8] text-white mb-12 shadow-xl overflow-hidden">
-               <Quote className="absolute -top-4 -right-4 w-32 h-32 opacity-10 rotate-12 text-white" />
-               <h2 className="text-white text-2xl font-bold mb-4 flex items-center gap-2">
-                 <TrendingUp className="w-6 h-6" />
-                 {isRtl ? "الملخص التنفيذي" : "Executive Summary"}
-               </h2>
-               <p className="relative z-10 text-blue-50 text-lg leading-relaxed opacity-95">
-                 {isRtl ? reportData.summaryAr : reportData.summaryEn}
-               </p>
-            </div>
+            {/* Main Overview Section */}
+            {reportData.sections[0] && (
+              <div className="relative p-8 rounded-3xl bg-gradient-to-br from-[#003C7F] to-[#00A8E8] text-white mb-12 shadow-xl overflow-hidden">
+                <Quote className="absolute -top-4 -right-4 w-32 h-32 opacity-10 rotate-12 text-white" />
+                <h2 className="text-white text-2xl font-bold mb-4 flex items-center gap-2">
+                  <TrendingUp className="w-6 h-6" />
+                  {reportData.sections[0].title}
+                </h2>
+                <p className="relative z-10 text-blue-50 text-lg leading-relaxed">
+                  {reportData.sections[0].content}
+                </p>
+              </div>
+            )}
 
             {/* Dynamic Rendering of Report Sections */}
             <div className="space-y-16">
-              {reportData.sections.map((section, idx) => (
+              {reportData.sections.slice(1).map((section, idx) => (
                 <section key={idx} className="group">
                   <div className="flex items-center gap-4 mb-6">
-                    <span className="flex items-center justify-center w-12 h-12 rounded-2xl bg-blue-600 text-white shadow-lg">
-                      {section.icon ? <section.icon className="w-6 h-6" /> : <span className="font-bold text-xl">{idx + 1}</span>}
+                    <span className="flex items-center justify-center w-12 h-12 rounded-2xl bg-blue-600 text-white shadow-lg font-bold text-xl">
+                      {idx + 1}
                     </span>
                     <h2 className="text-2xl md:text-3xl font-bold text-slate-800 dark:text-slate-100 m-0">
-                      {isRtl ? section.titleAr : section.titleEn}
+                      {section.title}
                     </h2>
                   </div>
 
                   <div className="bg-white dark:bg-gray-900 rounded-3xl p-6 md:p-10 border border-gray-100 dark:border-gray-800 shadow-sm group-hover:shadow-md transition-shadow">
-                    {/* Paragraphs rendering */}
-                    {(isRtl ? section.contentAr : section.contentEn).map((para, pIdx) => (
-                      <p key={pIdx} className="text-slate-600 dark:text-gray-300 text-lg leading-[1.8] mb-6 last:mb-0">
-                        {para}
+                    {/* Main Content */}
+                    {section.content && (
+                      <p className="text-slate-600 dark:text-gray-300 text-lg leading-[1.8] mb-6">
+                        {section.content}
                       </p>
-                    ))}
+                    )}
 
-                    {/* Sub-points Breakdown */}
-                    {section.subPoints && (
-                      <div className="grid gap-6 mt-10">
-                        {section.subPoints.map((point, ptIdx) => (
-                          <div key={ptIdx} className="flex gap-5 p-6 rounded-2xl bg-slate-50 dark:bg-gray-800/40 border-r-4 border-blue-500 relative overflow-hidden group/item">
-                             <div className="absolute top-0 left-0 w-full h-full bg-blue-500/5 opacity-0 group-hover/item:opacity-100 transition-opacity" />
-                             <div className="relative">
-                               <h4 className="font-bold text-xl text-slate-900 dark:text-white mb-2 flex items-center gap-2">
-                                 <ChevronRight className={`w-5 h-5 text-blue-500 ${isRtl ? '' : 'rotate-180'}`} />
-                                 {isRtl ? point.titleAr : point.titleEn}
-                               </h4>
-                               <p className="text-slate-600 dark:text-gray-400 text-lg leading-relaxed">
-                                 {isRtl ? point.descAr : point.descEn}
-                               </p>
-                             </div>
+                    {/* Subsections */}
+                    {section.subsections && section.subsections.length > 0 && (
+                      <div className="space-y-6 mt-8">
+                        {section.subsections.map((subsection, subIdx) => (
+                          <div key={subIdx} className="p-6 rounded-2xl bg-slate-50 dark:bg-gray-800/40 border-r-4 border-blue-500">
+                            <h4 className="font-bold text-xl text-slate-900 dark:text-white mb-3 flex items-center gap-2">
+                              <ChevronRight className="w-5 h-5 text-blue-500" />
+                              {subsection.title}
+                            </h4>
+                            <p className="text-slate-600 dark:text-gray-400 text-lg leading-relaxed">
+                              {subsection.content}
+                            </p>
+                            {subsection.bullets && subsection.bullets.length > 0 && (
+                              <ul className="mt-4 space-y-2">
+                                {subsection.bullets.map((bullet, bIdx) => (
+                                  <li key={bIdx} className="flex items-start gap-3 text-slate-600 dark:text-gray-400">
+                                    <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0 mt-1" />
+                                    <span>{bullet}</span>
+                                  </li>
+                                ))}
+                              </ul>
+                            )}
                           </div>
                         ))}
+                      </div>
+                    )}
+
+                    {/* Key Points */}
+                    {section.keyPoints && section.keyPoints.length > 0 && (
+                      <div className="space-y-4 mt-8">
+                        {section.keyPoints.map((point, kIdx) => (
+                          <div key={kIdx} className="flex items-start gap-4 p-5 rounded-xl bg-blue-50 dark:bg-blue-900/20 border-r-4 border-blue-500">
+                            <CheckCircle2 className="w-6 h-6 text-blue-600 flex-shrink-0 mt-1" />
+                            <p className="text-slate-700 dark:text-gray-300 text-lg leading-relaxed">
+                              {point}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Conclusion */}
+                    {section.conclusion && (
+                      <div className="mt-8 p-6 rounded-2xl bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 border-2 border-blue-200 dark:border-blue-800">
+                        <p className="text-slate-800 dark:text-gray-200 text-lg font-medium italic leading-relaxed">
+                          {section.conclusion}
+                        </p>
                       </div>
                     )}
                   </div>
@@ -161,14 +178,16 @@ export default function ReportDetailPage({ reportId }: { reportId: number }) {
             </div>
 
             {/* Final Conclusion Box */}
-            <div className="mt-20 p-8 md:p-12 rounded-[2rem] border-2 border-dashed border-blue-200 dark:border-blue-900 bg-blue-50/30 dark:bg-blue-950/10 text-center">
-               <h3 className="text-2xl font-bold text-blue-800 dark:text-blue-400 mb-6">
-                 {isRtl ? "الخلاصة الاستثمارية:" : "Investment Conclusion:"}
-               </h3>
-               <p className="text-slate-800 dark:text-gray-200 text-xl font-medium italic leading-relaxed max-w-3xl mx-auto">
-                 " {isRtl ? reportData.conclusionAr : reportData.conclusionEn} "
-               </p>
-            </div>
+            {reportData.sections[reportData.sections.length - 1]?.conclusion && (
+              <div className="mt-20 p-8 md:p-12 rounded-[2rem] border-2 border-dashed border-blue-200 dark:border-blue-900 bg-blue-50/30 dark:bg-blue-950/10 text-center">
+                <h3 className="text-2xl font-bold text-blue-800 dark:text-blue-400 mb-6">
+                  {isRtl ? "الخلاصة النهائية:" : "Final Conclusion:"}
+                </h3>
+                <p className="text-slate-800 dark:text-gray-200 text-xl font-medium leading-relaxed max-w-3xl mx-auto">
+                  " {reportData.sections[reportData.sections.length - 1].conclusion} "
+                </p>
+              </div>
+            )}
           </div>
 
           {/* Footer Actions */}
@@ -177,7 +196,7 @@ export default function ReportDetailPage({ reportId }: { reportId: number }) {
               <Download className="w-5 h-5" />
               {isRtl ? "تحميل التقرير الكامل (PDF)" : "Download Full Report (PDF)"}
             </button>
-            <button className="flex items-center justify-center gap-3 px-10 py-5 bg-white dark:bg-gray-800 text-slate-700 dark:text-white font-bold rounded-2xl border border-gray-200 dark:border-gray-700 hover:bg-gray-50 transition-all active:scale-95">
+            <button className="flex items-center justify-center gap-3 px-10 py-5 bg-white dark:bg-gray-800 text-slate-700 dark:text-white font-bold rounded-2xl border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all active:scale-95">
               <Mail className="w-5 h-5" />
               {isRtl ? "إرسال نسخة للإيميل" : "Send Copy to Email"}
             </button>

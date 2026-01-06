@@ -19,14 +19,14 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
         }
     }
     return {
-        title: reportData.titleAr + " - تقرير",
-        description: reportData.summaryAr,
+        title: reportData.title+ " - تقرير",
+        description: reportData.subtitle,
         icons: {
             icon: "/images/logo.webp",
         },
         openGraph: {
-            title: reportData.titleAr + " - تقرير",
-            description: reportData.summaryAr,
+            title: reportData.title + " - تقرير",
+            description: reportData.subtitle,
         },
     }
 }

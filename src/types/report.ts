@@ -44,23 +44,15 @@ export interface ReportData {
   titleAr: string;
   titleEn: string;
   category: string;
-  
   date: string;
-    author: string;
+  authorAr: string;
   authorEn: string;
-  readTime: string;
-  readTimeEn: string;
-  views: string;
   icon: IconType;
-
   summaryAr: string;
   summaryEn: string;
-
-  highlights: ReportHighlight[];
+  highlights?: ReportHighlight[];
   sections: ReportSection[];
-
   conclusionAr: string;
   conclusionEn: string;
-
-  relatedReports: RelatedReport[];
+  relatedReports?: RelatedReport[];
 }
