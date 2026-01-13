@@ -4,6 +4,7 @@
 import { useI18n } from "@/providers/i18n-provider";
 import { useState, useRef, useEffect, useCallback } from "react";
 import { Play, X, ChevronLeft, ChevronRight } from "lucide-react";
+import Image from "next/image";
 
 const styles = `
   @keyframes fadeIn { 
@@ -65,7 +66,8 @@ const videosData = [
     descAr: "شرح شامل لنظام الاستثمار وكيفية تحقيق عائد 120%+",
     descEn: "Comprehensive explanation of investment system and 120%+ returns",
     videoUrl: "/videos/video.mp4",
-    duration: "3:45",
+    thumbnail: "/images/video-thumbnails/video-thumb.png",
+    duration: "4:45",
   },
   {
     id: 2,
@@ -74,7 +76,48 @@ const videosData = [
     descAr: "دليل خطوة بخطوة للبدء في استثمارك",
     descEn: "Step-by-step guide to start your investment",
     videoUrl: "/videos/video-1.mp4",
-    duration: "2:30",
+    thumbnail: "/images/video-thumbnails/video-1-thumb.png",
+    duration: "1:00",
+  },
+  {
+    id: 3,
+    titleAr: "خطوات البدء",
+    titleEn: "Personal experience of Investment",
+    descAr: "دليل خطوة بخطوة للبدء في استثمارك",
+    descEn: "Step-by-step guide to start your investment",
+    videoUrl: "/videos/video-2.mp4",
+    thumbnail: "/images/video-thumbnails/video-2-thumb.png",
+    duration: "0:37",
+  },
+  {
+    id: 4,
+    titleAr: "خطوات البدء",
+    titleEn: "Getting Started",
+    descAr: "دليل خطوة بخطوة للبدء في استثمارك",
+    descEn: "Step-by-step guide to start your investment",
+    videoUrl: "/videos/video-3.mp4",
+    thumbnail: "/images/video-thumbnails/video-3-thumb.png",
+    duration: "1:00",
+  },
+  {
+    id: 5,
+    titleAr: "خطوات البدء",
+    titleEn: "Getting Started",
+    descAr: "دليل خطوة بخطوة للبدء في استثمارك",
+    descEn: "Step-by-step guide to start your investment",
+    videoUrl: "/videos/video-4.mp4",
+    thumbnail: "/images/video-thumbnails/video-4-thumb.png",
+    duration: "1:10",
+  },
+  {
+    id: 6,
+    titleAr: "خطوات البدء",
+    titleEn: "Getting Started",
+    descAr: "دليل خطوة بخطوة للبدء في استثمارك",
+    descEn: "Step-by-step guide to start your investment",
+    videoUrl: "/videos/video-5.mp4",
+    thumbnail: "/images/video-thumbnails/video-5-thumb.png",
+    duration: "1:10",
   }
 ];
 
@@ -261,9 +304,9 @@ export function VideoSection() {
             </div>
 
             {/* Video Playlist */}
-            <div className="flex gap-6 overflow-x-auto no-scrollbar pb-10 -mx-4 px-4 lg:grid lg:grid-cols-2 lg:mx-0 lg:px-0 lg:overflow-visible">
+            <div className="flex gap-4 lg:gap-6 overflow-x-auto no-scrollbar pb-10 -mx-4 px-4 lg:grid lg:grid-cols-2 lg:mx-0 lg:px-0 lg:overflow-visible">
               {videosData.map((video, index) => (
-                video.id!== selectedVideo.id && (
+                video.id !== selectedVideo.id && (
                 <div
                   key={video.id}
                   onClick={() => handleVideoSelect(video)}
@@ -271,28 +314,55 @@ export function VideoSection() {
                   role="button"
                   tabIndex={0}
                   aria-label={`${language === "ar" ? "مشاهدة" : "Watch"} ${language === "ar" ? video.titleAr : video.titleEn}`}
-                  className={`video-card-hover flex-shrink-0 w-[80vw] lg:w-full group cursor-pointer rounded-2xl overflow-hidden border-2 transition-all animate-slideUp ${
-                    selectedVideo.id === video.id 
-                      ? "border-sky-500 ring-4 ring-sky-500/10" 
-                      : "border-transparent bg-slate-50 dark:bg-gray-900"
-                  }`}
-                  style={{ animationDelay: `${index * 100}ms` }}
+                  className="video-card-hover flex-shrink-0 w-[85vw] sm:w-[45vw] lg:w-full group cursor-pointer rounded-2xl overflow-hidden border-2 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700 shadow-md hover:shadow-xl transition-all duration-300 animate-slideUp"
+                  style={{ 
+                    animationDelay: `${index * 100}ms`,
+                  }}
                 >
-                  <div className="relative aspect-video bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-800 dark:to-gray-900">
-                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                      <div className="p-3 rounded-full bg-white/20 backdrop-blur-md">
-                        <Play className="w-6 h-6 text-white fill-current" aria-hidden="true" />
+                  {/* Thumbnail Container */}
+                  <div className="relative aspect-video bg-gradient-to-br from-gray-100 via-gray-200 to-gray-300 dark:from-gray-800 dark:via-gray-900 dark:to-gray-800 overflow-hidden">
+                    {/* Video Thumbnail */}
+                    {video.thumbnail ? (
+                      <Image
+                        src={video.thumbnail}
+                        alt={language === "ar" ? video.titleAr : video.titleEn}
+                        fill
+                        className="object-cover transition-transform duration-300 group-hover:scale-110"
+                        sizes="(max-width: 640px) 85vw, (max-width: 1024px) 45vw, 50vw"
+                      />
+                    ) : (
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="w-16 h-16 rounded-full bg-white/10 dark:bg-black/20 backdrop-blur-sm flex items-center justify-center border border-white/20">
+                          <Play className="w-8 h-8 text-gray-400 dark:text-gray-500 fill-current" aria-hidden="true" />
+                        </div>
+                      </div>
+                    )}
+
+                        
+                    {/* Hover Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-black/0  transition-opacity duration-300 flex items-center justify-center">
+                      <div className="transform scale-90 group-hover:scale-100 transition-transform duration-300">
+                        <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-md border-2 border-white/30 flex items-center justify-center shadow-2xl">
+                          <Play className="w-8 h-8 text-white fill-current translate-x-0.5" aria-hidden="true" />
+                        </div>
                       </div>
                     </div>
-                    <div className="absolute bottom-3 right-3 px-2 py-1 rounded bg-black/70 text-white text-[10px] font-bold backdrop-blur-sm">
+                    
+                    {/* Duration Badge */}
+                    <div className="absolute bottom-3 right-3 px-2.5 py-1 rounded-lg bg-black/80 text-white text-xs font-semibold backdrop-blur-md border border-white/10 shadow-lg z-10">
                       {video.duration}
                     </div>
+                    
+                    {/* Gradient Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none z-0" />
                   </div>
-                  <div className="p-5">
-                    <h5 className="font-bold text-base mb-1 truncate" style={{ color: colors.primary }}>
+                  
+                  {/* Card Content */}
+                  <div className="p-4 lg:p-5 bg-white dark:bg-gray-900">
+                    <h5 className="font-bold text-base lg:text-lg mb-2 line-clamp-2 leading-snug transition-colors group-hover:underline" style={{ color: colors.primary }}>
                       {language === "ar" ? video.titleAr : video.titleEn}
                     </h5>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-1">
+                    <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2 leading-relaxed">
                       {language === "ar" ? video.descAr : video.descEn}
                     </p>
                   </div>

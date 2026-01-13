@@ -25,13 +25,13 @@ export function HeroSection() {
     { 
       icon: TrendingUp, 
       value: "120%", 
-      label: language === "ar" ? "عائد الربح" : "Profit Return",
+      label: language === "ar" ? "عائد الربح سنوياً" : "Profit Return Yearly",
       color: colors.primary,
     },
     { 
       icon: Users, 
       value: "1000+", 
-      label: language === "ar" ? "مستثمر" : "Investors",
+      label: language === "ar" ? "مستثمرين" : "Investors",
       color: colors.secondary,
     },
     { 
@@ -136,8 +136,8 @@ export function HeroSection() {
               style={{ transitionDelay: "300ms" }}
             >
               {language === "ar" 
-                ? "انضم إلى بوابة التسهيل وامتلك حصتك في قطاع الخدمات اللوجستية بعوائد تتجاوز 120%؛ إدارة احترافية وعقود موثقة حكومياً"
-                : "Join Portal and own your share in the logistics sector with returns exceeding 120%; professional management and government-certified contracts"}
+                ? "انضم إلى بوابة التسهيل وامتلك حصتك في قطاع الخدمات اللوجستية بعوائد تتجاوز 120% سنوياً إدارة احترافية وعقود موثقة حكومياً"
+                : "Join Portal and own your share in the logistics sector with returns exceeding 120% yearly; professional management and government-certified contracts"}
             </p>
 
             {/* CTA Buttons */}

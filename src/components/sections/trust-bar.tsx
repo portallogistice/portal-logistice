@@ -46,7 +46,7 @@ export function TrustBarSection() {
       alt: language === "ar" ? "المركز السعودي للأعمال" : "Saudi Business Center",
     },
     {
-      logo: "/images/platform-3.PNG",
+      logo: "/images/platform-3.png",
       alt: language === "ar" ? "المركز المعلومات الوطني" : "National Information Center",
     },
   ];
