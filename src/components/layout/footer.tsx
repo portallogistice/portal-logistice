@@ -18,6 +18,8 @@ export function Footer() {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+  const phoneNumber = "+966599977725"; // WhatsApp number without spaces
+  const whatsappUrl = `https://wa.me/${phoneNumber}`;
 
   const socialLinks = [
     { icon: Facebook, href: "#", label: "Facebook" },
@@ -131,12 +133,10 @@ export function Footer() {
               {language === "ar" ? "تواصل معنا" : "Contact Us"}
             </h4>
             <ul className="space-y-4">
-              <li className="flex items-start gap-3">
-                <Phone className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: colors.secondary }} />
-                <div className="text-sm">
-                  <p className="text-gray-400">+966 50 000 0000</p>
-                </div>
-              </li>
+              <a href={whatsappUrl} className="flex  gap-3">
+                <Phone className="w-5 h-5  mt-0.5" style={{ color: colors.secondary }} />
+               <span className="text-sm text-gray-400">966599977725+</span>
+              </a>
               <li className="flex items-start gap-3">
                 <Mail className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: colors.secondary }} />
                 <div className="text-sm">

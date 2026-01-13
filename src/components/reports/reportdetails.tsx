@@ -56,10 +56,7 @@ export default function ReportDetailPage({ reportId, language = "ar" }: { report
           
           {/* Header Section */}
           <header className="mb-12 text-center lg:text-right">
-            <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r ${reportData.color} text-white text-sm font-bold mb-6 shadow-lg`}>
-              <span className="text-2xl">{reportData.icon}</span>
-              <span>{reportData.department}</span>
-            </div>
+           
             
             <h1 className="text-3xl md:text-5xl font-extrabold text-slate-900 dark:text-white mb-4 leading-tight">
               {reportData.title}

@@ -13,42 +13,60 @@ const colors = {
   accent: "#0080C8",
 };
 
-const faqs = [
+export const faqs = [
   {
     questionAr: "كيف تعمل منصة بوابة الخدمات اللوجستية؟",
     questionEn: "How does the platform work?",
-    answerAr: "تعمل منصة بوابة الخدمات اللوجستية كمشغل ومستأجر للدراجات النارية الخاصة بالمستثمرين الراغبين في تحسين دخلهم الإضافي من خلال تأجيرها في مجال التوصيل.",
-    answerEn: "The platform operates as an operator and lessor of motorcycles for investors looking to improve their income through rental in the delivery field.",
+    answerAr: "تعمل المنصة كمشغل ومستأجر للدراجات النارية؛ حيث يتقدم المستثمر بطلب، وتقوم المنصة بدراسة الجدوى وتوقيع اتفاقية شراكة، ثم تشغيل الدراجة ضمن أسطولها بنظام الاستئجار لتحقيق إيراد شهري للمستثمر.",
+    answerEn: "The platform acts as an operator and lessee; investors apply, the platform conducts feasibility studies and signs partnership agreements, then operates the bikes within its fleet to generate monthly income for the investor.",
   },
   {
     questionAr: "ما هي المزايا التي توفرها المنصة للمستثمرين؟",
     questionEn: "What advantages does the platform offer?",
-    answerAr: "توفر المنصة للمستثمر إمكانية استئجار الدراجات النارية دون الحاجة إلى تعيين موظفين، الحصول على عائد استثماري ثابت من خلال الإيجار الشهري، والاستفادة من خدمات التسويق المتخصصة.",
-    answerEn: "The platform provides motorcycle rental without hiring employees, stable monthly returns, and specialized marketing services.",
+    answerAr: "توفر المنصة إمكانية استئجار الدراجات دون الحاجة لتوظيف عمالة، الحصول على عائد ثابت، الاستفادة من خدمات التسويق المتخصصة، إدارة المركبات، وتوفير خدمات التأمين.",
+    answerEn: "The platform offers bike leasing without the need to hire staff, fixed investment returns, specialized marketing services, vehicle management, and insurance coverage.",
   },
   {
     questionAr: "هل عمل المنصة يتوافق مع الشريعة الإسلامية؟",
     questionEn: "Is the platform Sharia-compliant?",
-    answerAr: "نعم، المنصة متوافقة مع الشريعة الإسلامية حيث يتم عقد شراكة واضحة بين المنصة والمستثمر، مع عقود موثقة من مركز الأعمال السعودي، وإيجار شهري محدد بدون فوائد ربوية.",
-    answerEn: "Yes, the platform is Sharia-compliant with clear partnerships, certified contracts, and fixed monthly rent without interest.",
+    answerAr: "نعم، العقود موثقة من مركز الأعمال السعودي وتعتمد نظام التأجير بمبلغ مقطوع محدد دون فوائد ربا، مع وضوح كامل في بنود الشراكة وتصفية الاستثمار.",
+    answerEn: "Yes, contracts are certified by the Saudi Business Center, based on a fixed-sum leasing system without interest, with full transparency in partnership and liquidation terms.",
   },
   {
     questionAr: "ما هي الإجراءات الحكومية التي تقوم بها المنصة؟",
     questionEn: "What government procedures are handled?",
-    answerAr: "تقوم المنصة بجميع الإجراءات الحكومية للدراجة النارية، بما في ذلك رخصة السير، تأمين المركبة، ولوحات المركبة.",
-    answerEn: "The platform handles all procedures including driving license, vehicle insurance, and vehicle plates.",
+    answerAr: "تتكفل المنصة بجميع الإجراءات بما في ذلك استخراج رخصة السير، تأمين المركبة، وإصدار لوحات المركبة.",
+    answerEn: "The platform handles all government procedures including driving licenses, vehicle insurance, and license plate issuance.",
+  },
+  {
+    questionAr: "كيف يتم التعامل مع الشكاوى؟",
+    questionEn: "How are complaints handled?",
+    answerAr: "تتم معالجة الشكاوى عبر الموقع أو الهاتف خلال 5 أيام عمل، مع التزام تام بالسرعة، الفعالية، العدالة، والسرية لضمان حقوق المستخدمين.",
+    answerEn: "Complaints are processed via the website or phone within 5 business days, ensuring speed, effectiveness, fairness, and confidentiality to protect user rights.",
   },
   {
     questionAr: "كيف يمكنني التسجيل في منصة بوابة الخدمات اللوجستية؟",
     questionEn: "How can I register on the platform?",
-    answerAr: "يمكنك التسجيل من خلال زيارة الموقع الإلكتروني وملء نموذج التسجيل بالبيانات المطلوبة، وسنقوم بالتواصل معك لاستكمال الإجراءات.",
-    answerEn: "Register by filling out the form on the website, and we will contact you to complete the procedures.",
+    answerAr: "من خلال زيارة الموقع والنقر على 'تسجيل'، ثم إدخال البيانات (الاسم، الهاتف، البريد، ونوع الخدمة)، وسنقوم بمراجعة الطلب والتواصل معك.",
+    answerEn: "By visiting the website, clicking 'Register', and entering your details (Name, Phone, Email, Service type). We will then review and contact you.",
   },
   {
-    questionAr: "متى يمكنني تصفية الاستثمار؟",
-    questionEn: "When can I liquidate the investment?",
-    answerAr: "يمكن تصفية الاستثمار في أي وقت بعد الأشهر الثلاثة الأولى بدون رسوم إضافية، مع وعد بشراء الأصل بخصم 35٪ كمعدل إهلاك خلال السنة الأولى.",
-    answerEn: "Liquidation is possible after 3 months without fees, with asset buyback at 35% depreciation during the first year.",
+    questionAr: "هل يتوفر دعم أو تمويل لشراء الدراجات؟",
+    questionEn: "Is financing or support available?",
+    answerAr: "نعم، توفر المنصة الدعم والتمويل عن طريق تقسيط رأس المال بالكامل أو جزء منه من خلال شركاء النجاح 'تابي' أو 'تمارا'.",
+    answerEn: "Yes, the platform providing support and financing by installments for the capital through partners like 'Tabby' or 'Tamara'.",
+  },
+  {
+    questionAr: "ما هي شروط تسجيل المستثمرين؟",
+    questionEn: "What are the investor registration requirements?",
+    answerAr: "يجب أن يكون المستثمر سعودي الجنسية أو مقيماً في المملكة، وأن يكون بالغاً لسن الرشد القانوني.",
+    answerEn: "The investor must be a Saudi national or a resident of KSA and must have reached the legal age of majority.",
+  },
+  {
+    questionAr: "ما هي سياسة تصفية الاستثمار؟",
+    questionEn: "What is the investment liquidation policy?",
+    answerAr: "يمكن تصفية الاستثمار بعد مرور أول 3 أشهر، مع وجود وعد بشراء الأصل بخصم 35% كمعدل إهلاك خلال السنة الأولى.",
+    answerEn: "Investment liquidation is possible after the first 3 months, with an option for asset buyback at a 35% depreciation rate during the first year.",
   },
 ];
 

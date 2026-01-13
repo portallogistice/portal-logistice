@@ -1,5 +1,6 @@
 // src/app/page.tsx
 import { HeroSection } from "@/components/sections/hero";
+import { TrustBarSection } from "@/components/sections/trust-bar";
 import { StepsSection } from "@/components/sections/steps";
 import { RegisterSection } from "@/components/sections/register";
 import { AboutSection } from "@/components/sections/about";
@@ -17,6 +18,7 @@ export default function Home() {
  
  <>
 <HeroSection />
+<TrustBarSection />
 <VideoSection />
 <ROICalculatorSection /> 
 <DigitalChatSection />

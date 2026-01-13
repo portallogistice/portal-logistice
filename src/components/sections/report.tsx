@@ -187,38 +187,7 @@ export  function ReportsSection({ language = "ar" }: ReportsSectionProps) {
             />
           </div>
 
-          {/* Category Filters */}
-          <div className="flex flex-wrap gap-3 justify-center">
-            {categories.map((category) => {
-              const Icon = category.icon;
-              const isActive = selectedCategory === category.id;
-
-              return (
-                <button
-                  key={category.id}
-                  onClick={() => setSelectedCategory(category.id)}
-                  className={`group flex items-center gap-2 px-5 py-3 rounded-xl font-semibold transition-all duration-300 hover:scale-105 ${
-                    isActive 
-                      ? "" 
-                      : "bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
-                  }`}
-                  style={{
-                    backgroundColor: isActive ? colors.secondary : undefined,
-                    color: isActive ? "white" : undefined,
-                    border: `2px solid ${isActive ? colors.secondary : `${colors.secondary}20`}`,
-                  }}
-                >
-                  <Icon className="w-4 h-4" />
-                  <span>{language === "ar" ? category.labelAr : category.labelEn}</span>
-                  {isActive && (
-                    <span className="px-2 py-0.5 rounded-full bg-white/20 text-xs font-bold">
-                      {filteredReports.length}
-                    </span>
-                  )}
-                </button>
-              );
-            })}
-          </div>
+       
         </div>
 
         {/* Reports Grid */}
@@ -302,7 +271,7 @@ export  function ReportsSection({ language = "ar" }: ReportsSectionProps) {
 
         {/* Pagination - Modern Design */}
         {totalPages > 1 && (
-          <div className="flex flex-col sm:flex-row justify-center items-center gap-3 sm:gap-3">
+          <div className="flex flex-row justify-center items-center gap-3 sm:gap-3">
             <button
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
               disabled={currentPage === 1}

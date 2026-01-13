@@ -3,6 +3,7 @@
 
 import { useEffect, useState, useRef, useCallback } from "react";
 import { Bot, Sparkles, Play, ShieldCheck, ArrowRight, UserCheck, TrendingUp } from "lucide-react";
+import { useI18n } from "@/providers/i18n-provider";
 
 const colors = {
   primary: "#003C7F",
@@ -39,11 +40,8 @@ const styles = `
   }
 `;
 
-interface DigitalChatSectionProps {
-  language?: "ar" | "en";
-}
-
-export function DigitalChatSection({ language = "ar" }: DigitalChatSectionProps) {
+export function DigitalChatSection() {
+  const { language } = useI18n();
   const [mounted, setMounted] = useState(false);
   const [isVideoInView, setIsVideoInView] = useState(false);
   const [videoError, setVideoError] = useState(false);
@@ -201,7 +199,7 @@ export function DigitalChatSection({ language = "ar" }: DigitalChatSectionProps)
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center max-w-7xl mx-auto">
             
             {/* Text Content Side */}
-            <div className="text-center lg:text-right space-y-6">
+            <div className={`text-center space-y-6 ${language === "ar" ? "lg:text-right" : "lg:text-left"}`}>
               {/* Badge */}
           
 
@@ -246,17 +244,19 @@ export function DigitalChatSection({ language = "ar" }: DigitalChatSectionProps)
                   title={t.feat1Title}
                   desc={t.feat1Desc}
                   color={colors.secondary}
+                  isRtl={isRtl}
                 />
                 <FeatureItem 
                   icon={<ShieldCheck className="w-6 h-6" style={{ color: colors.primary }} />}
                   title={t.feat2Title}
                   desc={t.feat2Desc}
                   color={colors.primary}
+                  isRtl={isRtl}
                 />
               </div>
 
               {/* CTA Section */}
-              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-end gap-6 pt-4">
+              <div className={`flex flex-col sm:flex-row items-center justify-center gap-6 pt-4 ${language === "ar" ? "lg:justify-end" : "lg:justify-start"}`}>
                 <button 
                   onClick={openTawkChat}
                   className="group relative px-8 py-4 text-white font-bold rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden active:scale-95"
@@ -410,12 +410,14 @@ function FeatureItem({
   icon, 
   title, 
   desc, 
-  color 
+  color,
+  isRtl
 }: { 
   icon: React.ReactNode; 
   title: string; 
   desc: string;
   color: string;
+  isRtl: boolean;
 }) {
   return (
     <div className="flex items-start gap-5 group">
@@ -425,7 +427,7 @@ function FeatureItem({
       >
         {icon}
       </div>
-      <div className="text-left rtl:text-right">
+      <div className={isRtl ? "text-right" : "text-left"}>
         <h4 className="font-bold text-gray-900 dark:text-white text-lg mb-1">{title}</h4>
         <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{desc}</p>
       </div>

@@ -116,40 +116,28 @@ export function HeroSection() {
               }`}
               style={{ transitionDelay: "200ms" }}
             >
-              <span style={{ color: colors.primary }}>
-                {language === "ar" ? "بوابة التسهيل" : "Portal"}
-              </span>
-              <br />
               <span 
                 className="bg-clip-text text-transparent bg-gradient-to-r"
                 style={{
-                  backgroundImage: `linear-gradient(135deg, ${colors.secondary} 0%, ${colors.accent} 100%)`
+                  backgroundImage: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.secondary} 100%)`
                 }}
               >
-                {language === "ar" ? "للخدمات اللوجستية" : "Logistics Services"}
+                {language === "ar" 
+                  ? "استثمر في المحرك الحقيقي للاقتصاد الرقمي"
+                  : "Invest in the Real Engine of the Digital Economy"}
               </span>
             </h1>
 
             {/* Subtitle */}
             <p 
-              className={`text-lg sm:text-xl text-gray-700 dark:text-gray-300 mb-4 leading-relaxed transition-all duration-700 ${
+              className={`text-lg sm:text-xl text-gray-700 dark:text-gray-300 mb-8 leading-relaxed transition-all duration-700 ${
                 mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
               }`}
               style={{ transitionDelay: "300ms" }}
             >
-              {t("heroSubtitle")}
-            </p>
-
-            {/* Description */}
-            <p 
-              className={`text-base text-gray-600 dark:text-gray-400 mb-8 leading-relaxed transition-all duration-700 ${
-                mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-              }`}
-              style={{ transitionDelay: "400ms" }}
-            >
               {language === "ar" 
-                ? "فكرة المشروع الاستثماري هي شراء دراجة نارية وتشغيلها في مجال الخدمات اللوجستية لتسليم الطلبات بهدف تحقيق عائد ربح يتجاوز 120%"
-                : "Investment project to purchase and operate motorcycles in logistics services, achieving profit returns exceeding 120%"}
+                ? "انضم إلى بوابة التسهيل وامتلك حصتك في قطاع الخدمات اللوجستية بعوائد تتجاوز 120%؛ إدارة احترافية وعقود موثقة حكومياً"
+                : "Join Portal and own your share in the logistics sector with returns exceeding 120%; professional management and government-certified contracts"}
             </p>
 
             {/* CTA Buttons */}

@@ -4,9 +4,11 @@ import { useState, useEffect, useRef } from "react";
 import { 
   Percent, Wallet, GraduationCap, Calculator, 
   CheckCircle2, AlertCircle, TrendingUp, History, 
-  UserCheck, ShieldCheck, HeartHandshake, MessageSquare
+  UserCheck, ShieldCheck, HeartHandshake, MessageSquare,
 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
+import { useI18n } from "@/providers/i18n-provider";
 
 const colors = {
   primary: "#003C7F",
@@ -14,11 +16,19 @@ const colors = {
   accent: "#0080C8",
 };
 
-export function OffersSection({ language = "ar" }: { language?: "ar" | "en" }) {
+export function OffersSection() {
+  const { language } = useI18n();
   const [investmentAmount, setInvestmentAmount] = useState(660);
   const [visibleElements, setVisibleElements] = useState<Set<string>>(new Set());
   const sectionRef = useRef<HTMLElement>(null);
-
+  const handleScrollClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    const targetId = e.currentTarget.href.split("#")[1];
+    const targetElement = document.getElementById(targetId);
+    if (targetElement) {
+      targetElement.scrollIntoView({ behavior: "smooth" });
+    }
+  };
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -134,21 +144,21 @@ export function OffersSection({ language = "ar" }: { language?: "ar" | "en" }) {
                 <div className="grid grid-cols-2 gap-4">
                     <div className="bg-white dark:bg-gray-900 p-2 rounded-xl text-center shadow-sm">
                         <p className="text-[10px] text-gray-400">{language === "ar" ? "استثمارك" : "Investment"}</p>
-                        <p className="font-bold text-sm text-blue-600">{investmentAmount} ر.س</p>
+                        <p className="font-bold text-sm text-blue-600">{investmentAmount} {language === "ar" ? "ر.س" : "SAR"}</p>
                     </div>
                     <div className="bg-white dark:bg-gray-900 p-2 rounded-xl text-center shadow-sm">
                         <p className="text-[10px] text-gray-400">{language === "ar" ? "إيرادك الشهري" : "Monthly Revenue"}</p>
-                        <p className="font-bold text-sm text-green-600">+{fractionalROI} ر.س</p>
+                        <p className="font-bold text-sm text-green-600">+{fractionalROI} {language === "ar" ? "ر.س" : "SAR"}</p>
                     </div>
                 </div>
               </div>
 
-              <button 
-                className="w-full py-4 rounded-xl text-white font-bold transition-all hover:shadow-xl active:scale-95"
+              <Link href="#register" onClick={handleScrollClick} 
+                className="group inline-flex items-center gap-3 px-8 py-4 text-white font-bold text-lg rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 active:scale-95"
                 style={{ background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.secondary} 100%)` }}
               >
                 {language === "ar" ? "انطلق في استثمارك الأول" : "Start Your First Investment"}
-              </button>
+              </Link>
               <p className="text-center text-[10px] text-gray-400 mt-4 flex items-center justify-center gap-1">
                 <AlertCircle className="w-3 h-3" />
                 {language === "ar" ? "رسوم إدارية ثابتة 95 ريال عند التعاقد" : "Fixed 95 SAR admin fee"}
@@ -220,12 +230,12 @@ export function OffersSection({ language = "ar" }: { language?: "ar" | "en" }) {
                 </div>
               </div>
 
-              <button 
-                className="w-full py-4 rounded-xl border-2 font-bold transition-all hover:bg-[#D4AF37] hover:text-white group"
-                style={{ color: "#D4AF37", borderColor: "#D4AF37" }}
+              <Link href="#register" onClick={handleScrollClick} 
+                className="group inline-flex items-center gap-3 px-8 py-4 text-white font-bold text-lg rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 active:scale-95"
+                style={{ background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.secondary} 100%)` }}
               >
                 {language === "ar" ? "ابدأ رحلة استثمارية هادئة" : "Start Your Peaceful Journey"}
-              </button>
+              </Link>
             </div>
           </div>
 
