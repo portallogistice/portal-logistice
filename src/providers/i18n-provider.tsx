@@ -21,13 +21,12 @@ const translations: Record<Language, Record<string, string>> = {
     // Navigation
     home: "الرئيسية",
     steps: "خطوات الشراء",
-    register: "تسجيل",
     about: "من نحن",
     faq: "الأسئلة الشائعة",
     reports: "التقارير",
     offers: "برامج الاستثمار",
     partners: "شركاؤنا",
-    
+    register: "تواصل معنا",
     // Hero Section
     heroTitle: "بوابة التسهيل للخدمات اللوجستية",
     heroSubtitle: "بوابتك إلى عالم الاستثمار وتشغيل ودعم اللوجستي",
@@ -52,6 +51,16 @@ const translations: Record<Language, Record<string, string>> = {
     step5Title: "التشغيل",
     step6Title: "التصفية",
     
+    receiveReports: "استلام التقارير عبر البريد الإلكتروني",
+    emailDescription: "سنرسل التقرير إلى هذا العنوان",
+    emailAddress: "عنوان البريد الإلكتروني",
+    emailPlaceholder: "your.name@company.com",
+    cancel: "إلغاء",
+    saveAndContinue: "حفظ ومتابعة",
+    invalidEmail: "يرجى إدخال عنوان بريد إلكتروني صحيح",
+    privacyNote: "نحترم خصوصيتك - سيتم استخدام بريدك الإلكتروني فقط لإرسال التقارير.",
+    close: "إغلاق",
+    
     // Footer
     copyright: "جميع الحقوق محفوظة - بوابة التسهيل للخدمات اللوجستية",
     subscribe: "الاشتراك",
@@ -60,17 +69,33 @@ const translations: Record<Language, Record<string, string>> = {
     // Navigation
     home: "Home",
     steps: "Purchase Steps",
-    register: "Register",
     about: "About Us",
     faq: "FAQ",
     reports: "Reports",
     offers: "Investment Programs",
     partners: "Partners",
+    register: "Contact Us",
     
     // Hero Section
     heroTitle: "Logistics Services Portal",
     heroSubtitle: "Your Gateway to Investment, Operation, and Logistics Support",
-    
+    // en.json
+
+  receiveReports: "Receive Reports by Email",
+  emailDescription: "We'll send the report to this address",
+  emailAddress: "Email address",
+  emailPlaceholder: "your.name@company.com",
+  cancel: "Cancel",
+  saveAndContinue: "Save & Continue",
+  invalidEmail: "Please enter a valid email address",
+  privacyNote: "We respect your privacy — your email will only be used for sending reports.",
+  close: "Close",
+
+
+// ar.json
+
+ 
+
     // Buttons
     contactUs: "Contact Us",
     learnMore: "Learn More",

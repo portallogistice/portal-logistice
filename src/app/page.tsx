@@ -12,6 +12,7 @@ import { ROICalculatorSection } from "@/components/sections/roicalculator";
 import { DigitalChatSection } from "@/components/sections/digitalchat";
 import { ReportsSection } from "@/components/sections/report";
 import { OffersSection } from "@/components/sections/offers";
+import { useI18n } from "@/providers/i18n-provider";
 
 export default function Home() {
   return (

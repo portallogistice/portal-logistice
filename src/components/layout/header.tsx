@@ -51,7 +51,7 @@ export function Header() {
   }, [mobileMenuOpen]);
 
   // Navigation Items
-  const navItems = ["home", "steps", "register", "about", "offers", "partners", "faq", "reports"];
+  const navItems = ["home", "steps", "about", "offers", "partners", "faq", "reports",'register'];
 
   return (
     <>
@@ -97,7 +97,7 @@ export function Header() {
                 <Link
                   key={item}
                   href={`/#${item}`}
-                  onClick={(e) => handleLinkClick(e, `#${item}`)}
+                  onClick={(e) => handleLinkClick(e, `/#${item}`)}
                   className="relative px-3 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-full hover:text-[#003C7F] dark:hover:text-blue-400 transition-colors group"
                 >
                   {t(item)}
@@ -184,7 +184,7 @@ export function Header() {
               <Link
                 key={item}
                 href={`/#${item}`}
-                onClick={(e) => handleLinkClick(e, `#${item}`)}
+                onClick={(e) => handleLinkClick(e, `/#${item}`)}
                 className={`flex items-center justify-between p-4 rounded-xl text-lg font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-900 transition-all group ${
                     mobileMenuOpen ? "translate-x-0 opacity-100" : "translate-x-8 opacity-0"
                 }`}

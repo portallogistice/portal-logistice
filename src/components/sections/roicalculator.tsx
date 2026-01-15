@@ -184,8 +184,8 @@ export function ROICalculatorSection() {
             
             <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
               {language === "ar" 
-                ? "قارن بين الخطة التقليدية والخطة الذكية واكتشف الفرق في العوائد"
-                : "Compare Traditional and Smart plans to discover the difference in returns"}
+                ? "قارن بين الخطة التقليدية وخطة  الذكية، واكتشف الفرق في الأرباح المصفاة من أعباء الصيانة الدورية."
+                : "Compare Traditional and Smart plans to discover the difference in filtered returns from routine maintenance burdens."}
             </p>
           </div>
 
@@ -485,17 +485,18 @@ export function ROICalculatorSection() {
                 </div>
               </div>
 
-              {/* Legal Notice */}
-              <div className="flex items-start gap-3 p-4 rounded-xl border-2"
+              
+               {/* Legal Notice */}
+               <div className="flex items-start gap-3 p-4 rounded-xl border-2"
                 style={{ 
                   backgroundColor: `${colors.accent}05`,
                   borderColor: `${colors.accent}20`
                 }}>
-                <FileCheck className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: colors.accent }} />
+                <Info className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: colors.accent }} />
                 <p className="text-xs sm:text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
                   {language === "ar" 
-                    ? "جميع الأرباح المذكورة تخضع لعقود استثمارية موثقة رسمياً ومعتمدة من مركز الأعمال السعودي"
-                    : "All profits are subject to officially documented investment contracts certified by Saudi Business Center"}
+                    ? "   الأرقام الموضحة أعلاه هي الارباح للعوائد بعد استقطاع تكاليف الصيانة الدورية "+ "و جميع الأرباح المذكورة تخضع لعقود استثمارية موثقة رسمياً ومعتمدة من مركز الأعمال السعودي" 
+                    : "All profits are subject to officially documented investment contracts certified by Saudi Business Center and the numbers shown above are the profits after deducting routine maintenance burdens."}
                 </p>
               </div>
             </div>

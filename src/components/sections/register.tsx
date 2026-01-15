@@ -161,7 +161,7 @@ export function RegisterSection() {
             
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 leading-tight">
               <span style={{ color: colors.primary }}>
-                {language === "ar" ? "تسجيل " : "Register as "}
+                {language === "ar" ? "سجل الآن و " : "register now and "}
               </span>
               <span 
                 className="bg-clip-text text-transparent"
@@ -169,7 +169,7 @@ export function RegisterSection() {
                   backgroundImage: `linear-gradient(135deg, ${colors.secondary} 0%, ${colors.accent} 100%)`,
                 }}
               >
-                {language === "ar" ? "كمستثمر" : "Investor"}
+                {language === "ar" ? "سنتواصل معك في أقرب وقت ممكن" : "will contact you as soon as possible"}
               </span>
             </h2>
             

@@ -69,7 +69,7 @@ export function AboutSection() {
 
   const stats = [
     { value: "120%", label: language === "ar" ? "عائد الربح" : "Profit Return", icon: TrendingUp },
-    { value: "500+", label: language === "ar" ? "دراجة نارية" : "Motorcycles", icon: Building2 },
+    { value: "5000+", label: language === "ar" ? "دراجة نارية" : "Motorcycles", icon: Building2 },
     { value: "1000+", label: language === "ar" ? "مستثمر" : "Investors", icon: Users },
   ];
 
