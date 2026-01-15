@@ -36,7 +36,8 @@ export default function ReportDetailPage({
   // State management
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState(false);
+  const [successSendingEmail, setSuccessSendingEmail] = useState(false);
+  const [successDownloadingReport, setSuccessDownloadingReport] = useState(false);
 const [showSendReportModal, setShowSendReportModal] = useState(false);
   // Download handler
   const handleDownloadReport = async () => {
@@ -44,7 +45,7 @@ const [showSendReportModal, setShowSendReportModal] = useState(false);
 
     setLoading(true);
     setError("");
-    setSuccess(false);
+    setSuccessDownloadingReport(false);
 
     try {
       // Make API request
@@ -82,8 +83,8 @@ const [showSendReportModal, setShowSendReportModal] = useState(false);
       }, 100);
 
       // Show success message
-      setSuccess(true);
-      setTimeout(() => setSuccess(false), 5000);
+      setSuccessDownloadingReport(true);
+      setTimeout(() => setSuccessDownloadingReport(false), 5000);
 
     } catch (err) {
       console.error("Download error:", err);
@@ -114,7 +115,7 @@ const handleEmailReport = async () => {
 
   setLoading(true);
   setError("");
-  setSuccess(false);
+  setSuccessSendingEmail(false);
 
   try {
     const response = await fetch('/api/send-email', {
@@ -132,7 +133,7 @@ const handleEmailReport = async () => {
     const data = await response.json();
 
     if (data.success) {
-      setSuccess(true);
+      setSuccessSendingEmail(true);
       setError("");
       
     } else {
@@ -367,23 +368,17 @@ const handleEmailReport = async () => {
                 disabled={loading}
                 className="flex items-center justify-center gap-3 px-10 py-5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-2xl shadow-xl shadow-blue-200 dark:shadow-none transition-all hover:-translate-y-1 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
               >
-                {loading ? (
-                  <Loader2 className="w-5 h-5 animate-spin" />
-                ) : success ? (
-                  <Check className="w-5 h-5" />
-                ) : (
-                  <Download className="w-5 h-5" />
-                )}
+               
                 {loading
                   ? isRtl ? "جاري التحميل..." : "Downloading..."
-                  : success
+                  : successDownloadingReport
                   ? isRtl ? "تم التحميل بنجاح!" : "Downloaded!"
                   : isRtl ? "تحميل التقرير الكامل (PDF)" : "Download Full Report (PDF)"
                 }
               </button>
               <button 
   onClick={handleEmailReport}  // This should now use the updated function
-  disabled={loading || success}
+  disabled={loading || successSendingEmail}
   className="flex items-center justify-center gap-3 px-10 py-5 bg-white dark:bg-gray-800 text-slate-700 dark:text-white font-bold rounded-2xl border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
 >
   <Mail className="w-5 h-5" />
@@ -404,7 +399,7 @@ const handleEmailReport = async () => {
             )}
 
             {/* Success Message */}
-            {success && (
+            {successSendingEmail && (
               <div className="flex items-center gap-3 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl text-green-700 dark:text-green-400">
                 <Check className="w-5 h-5 flex-shrink-0" />
                 <p className="text-sm font-medium">

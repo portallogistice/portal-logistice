@@ -28,14 +28,14 @@ export const metadata: Metadata = {
   keywords: "logistics, investment, Saudi Arabia, delivery, motorcycle",
   icons: {
     icon: [
-      { url: "/images/logo.webp", type: "image/webp" },
-      { url: "/images/logo.webp", type: "image/webp", sizes: "32x32" },
-      { url: "/images/logo.webp", type: "image/webp", sizes: "16x16" },
+      { url: "/images/logo.png", type: "image/png" },
+      { url: "/images/logo.png", type: "image/png", sizes: "32x32" },
+      { url: "/images/logo.png", type: "image/png", sizes: "16x16" },
     ],
     apple: [
-      { url: "/images/logo.webp", type: "image/webp", sizes: "180x180" },
+      { url: "/images/logo.png", type: "image/png", sizes: "180x180" },
     ],
-    shortcut: "/images/logo.webp",
+    shortcut: "/images/logo.png",
   },
   openGraph: {
     title: "بوابة التسهيل للخدمات اللوجستية | Logistics Services Portal",
@@ -44,7 +44,7 @@ export const metadata: Metadata = {
     siteName: "Portal Logistice",
     images: [
       {
-        url: "/images/logo.webp",
+        url: "/images/logo.png",
         width: 1200,
         height: 630,
         alt: "Portal Logistice Logo",
@@ -57,7 +57,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "بوابة التسهيل للخدمات اللوجستية | Logistics Services Portal",
     description: "بوابتك إلى عالم الاستثمار وتشغيل ودعم اللوجستي",
-    images: ["/images/logo.webp"],
+    images: ["/images/logo.png"],
   },
   manifest: "/manifest.json",
 };

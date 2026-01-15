@@ -271,81 +271,86 @@ export  function ReportsSection({ language = "ar" }: ReportsSectionProps) {
 
         {/* Pagination - Modern Design */}
         {totalPages > 1 && (
-          <div className="flex flex-row justify-center items-center gap-3 sm:gap-3">
-            <button
-              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-              disabled={currentPage === 1}
-              className={`w-full sm:w-auto px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl font-semibold text-sm sm:text-base transition-all disabled:opacity-30 disabled:cursor-not-allowed hover:scale-105 active:scale-95 shadow-sm hover:shadow-md ${
-                currentPage === 1 
-                  ? "bg-transparent dark:bg-transparent border-2" 
-                  : ""
-              }`}
-              style={{
-                backgroundColor: currentPage === 1 ? undefined : colors.primary,
-                color: currentPage === 1 ? colors.primary : "white",
-                border: `2px solid ${colors.primary}`,
-              }}
-            >
-              <span className="flex items-center justify-center gap-2">
-                <ArrowRight className={`w-4 h-4 ${language === "ar" ? "" : "rotate-180"}`} />
-                {language === "ar" ? "السابق" : "Previous"}
-              </span>
-            </button>
-
-            <div className="flex gap-1.5 sm:gap-2 overflow-x-auto pb-2 sm:pb-0 w-full sm:w-auto justify-center px-2 sm:px-0">
-              {Array.from({ length: Math.min(totalPages <= 5 ? totalPages : 5, totalPages) }, (_, i) => {
-                let pageNum;
-                if (totalPages <= 5) {
-                  pageNum = i + 1;
-                } else if (currentPage <= 3) {
-                  pageNum = i + 1;
-                } else if (currentPage >= totalPages - 2) {
-                  pageNum = totalPages - 4 + i;
-                } else {
-                  pageNum = currentPage - 2 + i;
-                }
-
-                return (
-                  <button
-                    key={pageNum}
-                    onClick={() => setCurrentPage(pageNum)}
-                    className={`w-9 h-9 sm:w-11 sm:h-11 rounded-xl font-bold text-sm sm:text-base transition-all hover:scale-110 active:scale-95 shadow-sm hover:shadow-md flex-shrink-0 ${
-                      currentPage === pageNum 
-                        ? "" 
-                        : "bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
-                    }`}
-                    style={{
-                      backgroundColor: currentPage === pageNum ? colors.secondary : undefined,
-                      color: currentPage === pageNum ? "white" : undefined,
-                      border: `2px solid ${currentPage === pageNum ? colors.secondary : `${colors.secondary}20`}`,
-                    }}
-                  >
-                    {pageNum}
-                  </button>
-                );
-              })}
-            </div>
-
-            <button
-              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-              disabled={currentPage === totalPages}
-              className={`w-full sm:w-auto px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl font-semibold text-sm sm:text-base transition-all disabled:opacity-30 disabled:cursor-not-allowed hover:scale-105 active:scale-95 shadow-sm hover:shadow-md ${
-                currentPage === totalPages 
-                  ? "bg-transparent dark:bg-transparent border-2" 
-                  : ""
-              }`}
-              style={{
-                backgroundColor: currentPage === totalPages ? undefined : colors.primary,
-                color: currentPage === totalPages ? colors.primary : "white",
-                border: `2px solid ${colors.primary}`,
-              }}
-            >
-              <span className="flex items-center justify-center gap-2">
-                {language === "ar" ? "التالي" : "Next"}
-                <ArrowRight className={`w-4 h-4 ${language === "ar" ? "rotate-180" : ""}`} />
-              </span>
-            </button>
-          </div>
+        <div className="flex flex-row justify-center items-center gap-2 sm:gap-3 w-full px-2 sm:px-4 overflow-x-auto scrollbar-hide py-3">
+        {/* Previous Button */}
+        <button
+          onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+          disabled={currentPage === 1}
+          className={`flex-shrink-0 px-3 sm:px-6 py-2 sm:py-3 rounded-xl font-semibold text-xs sm:text-base transition-all disabled:opacity-40 disabled:cursor-not-allowed hover:scale-105 active:scale-95 shadow-md hover:shadow-lg ${
+            currentPage === 1 
+              ? "bg-transparent dark:bg-transparent border-2" 
+              : ""
+          }`}
+          style={{
+            backgroundColor: currentPage === 1 ? undefined : colors.primary,
+            color: currentPage === 1 ? colors.primary : "white",
+            border: `2px solid ${colors.primary}`,
+          }}
+        >
+          <span className="flex items-center justify-center gap-1 sm:gap-2">
+            <ArrowRight className={`w-3 h-3 sm:w-5 sm:h-5 ${language === "ar" ? "" : "rotate-180"}`} />
+            <span className="hidden sm:inline">{language === "ar" ? "السابق" : "Previous"}</span>
+          </span>
+        </button>
+      
+        {/* Page Numbers */}
+        <div className="flex gap-1.5 sm:gap-2 flex-shrink-0">
+          {Array.from({ length: Math.min(totalPages <= 5 ? totalPages : 5, totalPages) }, (_, i) => {
+            let pageNum;
+            if (totalPages <= 5) {
+              pageNum = i + 1;
+            } else if (currentPage <= 3) {
+              pageNum = i + 1;
+            } else if (currentPage >= totalPages - 2) {
+              pageNum = totalPages - 4 + i;
+            } else {
+              pageNum = currentPage - 2 + i;
+            }
+      
+            return (
+              <button
+                key={pageNum}
+                onClick={() => setCurrentPage(pageNum)}
+                className={`w-8 h-8 sm:w-11 sm:h-11 rounded-xl font-bold text-xs sm:text-base transition-all hover:scale-110 active:scale-95 shadow-md hover:shadow-lg flex-shrink-0 ${
+                  currentPage === pageNum 
+                    ? "" 
+                    : "bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
+                }`}
+                style={{
+                  backgroundColor: currentPage === pageNum ? colors.secondary : undefined,
+                  color: currentPage === pageNum ? "white" : undefined,
+                  border: `2px solid ${currentPage === pageNum ? colors.secondary : `${colors.secondary}20`}`,
+                }}
+              >
+                {pageNum}
+              </button>
+            );
+          })}
+        </div>
+      
+        {/* Next Button */}
+        <button
+          onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+          disabled={currentPage === totalPages}
+          className={`flex-shrink-0 px-3 sm:px-6 py-2 sm:py-3 rounded-xl font-semibold text-xs sm:text-base transition-all disabled:opacity-40 disabled:cursor-not-allowed hover:scale-105 active:scale-95 shadow-md hover:shadow-lg ${
+            currentPage === totalPages 
+              ? "bg-transparent dark:bg-transparent border-2" 
+              : ""
+          }`}
+          style={{
+            backgroundColor: currentPage === totalPages ? undefined : colors.primary,
+            color: currentPage === totalPages ? colors.primary : "white",
+            border: `2px solid ${colors.primary}`,
+          }}
+        >
+          <span className="flex items-center justify-center gap-1 sm:gap-2">
+            <span className="hidden sm:inline">{language === "ar" ? "التالي" : "Next"}</span>
+            <ArrowRight className={`w-3 h-3 sm:w-5 sm:h-5 ${language === "ar" ? "rotate-180" : ""}`} />
+          </span>
+        </button>
+      </div>
+      
+    
         )}
       </div>
 
@@ -442,15 +447,7 @@ export  function ReportsSection({ language = "ar" }: ReportsSectionProps) {
 
               {/* Action Buttons */}
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-                <button
-                  className="flex-1 flex items-center justify-center gap-3 px-6 py-4 text-white font-bold text-base sm:text-lg rounded-xl shadow-lg hover:shadow-2xl transition-all hover:scale-105 active:scale-95"
-                  style={{
-                    background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.secondary} 100%)`,
-                  }}
-                >
-                  <Download className="w-5 h-5" />
-                  <span>{language === "ar" ? "تحميل التقرير" : "Download Report"}</span>
-                </button>
+               
                 
                 <button
                   onClick={() => setSelectedReport(null)}

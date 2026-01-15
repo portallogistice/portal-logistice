@@ -73,7 +73,7 @@ export function Header() {
             >
               <div className="relative h-10 w-10 sm:h-12 sm:w-12 shrink-0 overflow-hidden rounded-xl bg-white dark:bg-gray-800 shadow-sm border border-gray-100 dark:border-gray-700 transition-transform group-hover:scale-105">
                 <Image
-                  src="/images/logo.webp"
+                    src="/images/logo.png"
                   alt="Portal Logistic"
                   fill
                   className="object-contain p-1"

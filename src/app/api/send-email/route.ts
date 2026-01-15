@@ -108,54 +108,85 @@ function generateReportPDF(report: any): ArrayBuffer {
   
   // Header background
   doc.setFillColor(0, 60, 127);
-  doc.rect(0, 0, pageWidth, 60, "F");
+  doc.rect(0, 0, pageWidth, 70, "F");
   
-  // Logo circle (top right for RTL)
-  doc.setFillColor(255, 255, 255);
-  doc.circle(pageWidth - 25, 15, 8, "F");
-  doc.setTextColor(0, 60, 127);
-  doc.setFontSize(10);
-  doc.setFont("Amiri", "bold");
-  doc.text("بوابة", pageWidth - 25, 14, { align: "center" });
-  doc.text("التسهيل", pageWidth - 25, 18, { align: "center" });
+  // Logo - FIXED VERSION
+  try {
+    const logoPath = path.join(process.cwd(), "public", "images", "logo.png"); // Use PNG
+    const logoBuffer = fs.readFileSync(logoPath);
+    const logoBase64 = logoBuffer.toString("base64");
+    
+    // Logo dimensions and position
+    const logoSize = 12; // Size in mm
+    const logoX = pageWidth - margin - logoSize;
+    const logoY = 8;
+    
+    // White circle background for logo
+    doc.setFillColor(255, 255, 255);
+    doc.circle(logoX + logoSize / 2, logoY + logoSize / 2, logoSize / 2 + 1, "F");
+    
+    // ...
+    doc.addImage(
+      `data:image/png;base64,${logoBase64}`, // PNG instead of WEBP
+      'PNG',
+      logoX,
+      logoY,
+      logoSize,
+      logoSize
+    );
+  } catch (error) {
+    console.error("Error loading logo:", error);
+    // Fallback to text logo
+    doc.setFillColor(255, 255, 255);
+    doc.circle(pageWidth - 25, 15, 8, "F");
+    doc.setTextColor(0, 60, 127);
+    doc.setFontSize(10);
+    doc.setFont("Amiri", "bold");
+    doc.text(reverseArabicText("بوابة"), pageWidth - 25, 14, { align: "center" });
+    doc.text(reverseArabicText("التسهيل"), pageWidth - 25, 18, { align: "center" });
+  }
   
-  // Title
+  // Title - FIXED SPACING
   doc.setTextColor(255, 255, 255);
   doc.setFont("Amiri", "bold");
-  doc.setFontSize(24);
-  const titleLines = wrapText(report.title, maxWidth - 40, 24);
-  let titleY = 25;
+  doc.setFontSize(22);
+  const titleLines = wrapText(report.title, maxWidth - 30, 22);
+  let titleY = 32; // Better starting position
   titleLines.forEach((line: string) => {
     doc.text(line, pageWidth / 2, titleY, { align: "center" });
-    titleY += 8;
+    titleY += 9; // Better line spacing
   });
   
-  // Subtitle
+  // Add spacing between title and subtitle
+  titleY += 3;
+  
+  // Subtitle - FIXED SPACING
   if (report.subtitle) {
-    doc.setFontSize(16);
+    doc.setFontSize(14);
     doc.setFont("Amiri", "normal");
-    doc.setTextColor(220, 230, 240);
-    const subtitleLines = wrapText(report.subtitle, maxWidth - 40, 16);
+    doc.setTextColor(220, 235, 245);
+    const subtitleLines = wrapText(report.subtitle, maxWidth - 30, 14);
     subtitleLines.forEach((line: string) => {
       doc.text(line, pageWidth / 2, titleY, { align: "center" });
-      titleY += 6;
+      titleY += 7; // Better line spacing
     });
   }
   
   // Info bar
   doc.setFillColor(0, 50, 100);
-  doc.rect(0, 60, pageWidth, 15, "F");
+  doc.rect(0, 70, pageWidth, 12, "F");
   doc.setFontSize(9);
   doc.setTextColor(255, 255, 255);
+  doc.setFont("Amiri", "normal");
   const currentDate = new Date().toLocaleDateString("ar-SA", {
     year: "numeric",
     month: "long",
     day: "numeric",
   });
-  doc.text(reverseArabicText(`تاريخ التقرير: ${currentDate}`), pageWidth - 20, 69, { align: "right" });
-  doc.text(reverseArabicText("تقرير موثق ✓"), 20, 69);
+  doc.text((`تاريخ التقرير: ${currentDate}`), pageWidth - 20, 77, { align: "right" });
+  doc.text(("تقرير موثق ✓"), 20, 77);
   
-  currentY = 85;
+  currentY = 90;
   
   // ============================================================================
   // SECTIONS
@@ -264,7 +295,6 @@ function generateReportPDF(report: any): ArrayBuffer {
       doc.setFontSize(12);
       doc.setFont("Amiri", "bold");
       doc.setTextColor(0, 60, 127);
-      doc.text("النقاط الرئيسية:", pageWidth - 25, currentY, { align: "right" });
       currentY += 8;
       
       section.keyPoints.forEach((point: string) => {
@@ -385,21 +415,173 @@ export async function POST(request: Request) {
 
     // Send email with PDF attachment
     const data = await resend.emails.send({
-      from: 'Portal Logistics <reports@portallogistice.com>', // Use your verified domain
+      from: 'Portal Logistics <reports@portallogistice.com>',
       to: email,
-      subject: subject || 'تقرير بوابة التسهيل',
+      subject: subject || 'تقرير استراتيجي من بوابة التسهيل - فرص استثمارية في اللوجستيات الذكية',
       html: `
-        <div dir="rtl" style="font-family: Arial, sans-serif; padding: 20px;">
-          <h2 style="color: #003C7F;">تقرير بوابة التسهيل</h2>
-          <p>مرحباً،</p>
-          <p>   التقرير المرفق أدناه هو نسخة من التقرير الأصلي.</p>
-          <br/>
-          <p>مع أطيب التحيات،<br/>فريق بوابة التسهيل</p>
-        </div>
+        <!DOCTYPE html>
+        <html dir="rtl" lang="ar">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>تقرير بوابة التسهيل</title>
+          <style>
+            /* Mobile-first responsive styles */
+            @media only screen and (max-width: 600px) {
+              .email-container {
+                width: 100% !important;
+                max-width: 100% !important;
+              }
+              
+              .header {
+                padding: 30px 20px !important;
+              }
+              
+              .header h1 {
+                font-size: 24px !important;
+              }
+              
+              .header p {
+                font-size: 12px !important;
+              }
+              
+              .content {
+                padding: 30px 20px !important;
+              }
+              
+              .content p,
+              .highlight-box p,
+              .attachment-box p {
+                font-size: 14px !important;
+              }
+              
+              .highlight-box,
+              .attachment-box {
+                padding: 15px !important;
+                margin: 15px 0 !important;
+              }
+              
+              .footer {
+                padding: 20px 15px !important;
+              }
+              
+              .footer p {
+                font-size: 12px !important;
+              }
+              
+              .footer-links {
+                display: block !important;
+              }
+              
+              .footer-links a {
+                display: block !important;
+                margin: 5px 0 !important;
+              }
+              
+              .footer-links span {
+                display: none !important;
+              }
+            }
+          </style>
+        </head>
+        <body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; direction: rtl;">
+          <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f8fafc; padding: 40px 20px;">
+            <tr>
+              <td align="center">
+                <table class="email-container" width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); max-width: 600px;">
+                  
+                  <!-- Header with Gradient -->
+                  <tr>
+                    <td class="header" style="background: linear-gradient(135deg, #003C7F 0%, #00A8E8 100%); padding: 40px 30px; text-align: center;">
+                      <h1 style="margin: 0; color: #ffffff; font-size: 28px; font-weight: bold; letter-spacing: 0.5px;">
+                        بوابة التسهيل
+                      </h1>
+                      <p style="margin: 10px 0 0 0; color: #e0f2fe; font-size: 14px; font-weight: 500;">
+                        Portal Logistics - Excellence in Smart Logistics
+                      </p>
+                    </td>
+                  </tr>
+                  
+                  <!-- Main Content -->
+                  <tr>
+                    <td class="content" style="padding: 40px 30px;">
+                      
+                      <!-- Greeting -->
+                      <p style="margin: 0 0 20px 0; color: #1e293b; font-size: 16px; line-height: 1.6;">
+                        السلام عليكم ورحمة الله وبركاته،
+                      </p>
+                      
+                      <!-- Main Message -->
+                      <div class="highlight-box" style="background-color: #f1f5f9; border-right: 4px solid #00A8E8; padding: 20px; margin: 20px 0; border-radius: 8px;">
+                        <p style="margin: 0 0 15px 0; color: #334155; font-size: 15px; line-height: 1.8; font-weight: 500;">
+                          مرحباً بكم في عصر اللوجستيات الذكية.
+                        </p>
+                        <p style="margin: 0 0 15px 0; color: #334155; font-size: 15px; line-height: 1.8;">
+                          في <strong style="color: #003C7F;">بوابة التسهيل</strong>، نحن المحرك الذي يحول التحديات التشغيلية إلى فرص استثمارية ذهبية. يسعدنا أن نشارككم نسخة من تقريرنا الاستراتيجي الذي يجسد فلسفتنا في تحويل المال من مجرد سيولة معرضة للمخاطر إلى أصول حية ومنتجة.
+                        </p>
+                        <p style="margin: 0; color: #334155; font-size: 15px; line-height: 1.8;">
+                          نحن هنا لنسهل طريقكم نحو الصدارة.
+                        </p>
+                      </div>
+                      
+                      <!-- Attachment Notice -->
+                      <div class="attachment-box" style="background-color: #dbeafe; border: 2px dashed #0284c7; padding: 20px; margin: 25px 0; border-radius: 8px; text-align: center;">
+                        <p style="margin: 0 0 10px 0; color: #0c4a6e; font-size: 15px; font-weight: bold;">
+                          📎 التقرير المرفق
+                        </p>
+                        <p style="margin: 0; color: #075985; font-size: 14px;">
+                          يرجى الاطلاع على التقرير الاستراتيجي المرفق بهذه الرسالة
+                        </p>
+                      </div>
+                      
+                      <!-- Closing -->
+                      <p style="margin: 30px 0 10px 0; color: #475569; font-size: 15px; line-height: 1.6;">
+                        نتطلع إلى التواصل معكم ومناقشة الفرص الاستثمارية المتاحة.
+                      </p>
+                      
+                      <p style="margin: 20px 0 0 0; color: #64748b; font-size: 14px; line-height: 1.6;">
+                        مع أطيب التحيات،<br>
+                        <strong style="color: #003C7F;">فريق بوابة التسهيل</strong><br>
+                        <span style="font-size: 13px; color: #94a3b8;">قسم التقارير الاستراتيجية</span>
+                      </p>
+                      
+                    </td>
+                  </tr>
+                  
+                  <!-- Footer -->
+                  <tr>
+                    <td class="footer" style="background-color: #f8fafc; padding: 30px; text-align: center; border-top: 1px solid #e2e8f0;">
+                      <p style="margin: 0 0 10px 0; color: #64748b; font-size: 13px;">
+                        بوابة التسهيل - Portal Logistics
+                      </p>
+                      <p style="margin: 0 0 15px 0; color: #94a3b8; font-size: 12px;">
+                        الريادة في الحلول اللوجستية المتكاملة
+                      </p>
+                      <div class="footer-links" style="margin: 15px 0;">
+                        <a href="https://portallogistice.com" style="color: #0284c7; text-decoration: none; font-size: 13px; margin: 0 10px;">
+                          🌐 الموقع الإلكتروني
+                        </a>
+                        <span style="color: #cbd5e1;">|</span>
+                        <a href="mailto:reports@portallogistice.com" style="color: #0284c7; text-decoration: none; font-size: 13px; margin: 0 10px;">
+                          ✉️ تواصل معنا
+                        </a>
+                      </div>
+                      <p style="margin: 15px 0 0 0; color: #94a3b8; font-size: 11px;">
+                        © ${new Date().getFullYear()} بوابة التسهيل. جميع الحقوق محفوظة.
+                      </p>
+                    </td>
+                  </tr>
+                  
+                </table>
+              </td>
+            </tr>
+          </table>
+        </body>
+        </html>
       `,
       attachments: [
         {
-          filename: `report-${reportId}-${new Date().toISOString().split('T')[0]}.pdf`,
+          filename: `Portal-Logistics-Strategic-Report-${reportId}-${new Date().toISOString().split('T')[0]}.pdf`,
           content: pdfBase64,
         },
       ],

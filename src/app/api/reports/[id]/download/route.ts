@@ -37,7 +37,6 @@ function loadArabicFonts(doc: jsPDF) {
     
     // Set default font
     doc.setFont("Amiri", "normal");
-   
     
     return true;
   } catch (error) {
@@ -107,54 +106,85 @@ function generateReportPDF(report: any): ArrayBuffer {
   
   // Header background
   doc.setFillColor(0, 60, 127);
-  doc.rect(0, 0, pageWidth, 60, "F");
+  doc.rect(0, 0, pageWidth, 70, "F");
   
-  // Logo circle (top right for RTL)
-  doc.setFillColor(255, 255, 255);
-  doc.circle(pageWidth - 25, 15, 8, "F");
-  doc.setTextColor(0, 60, 127);
-  doc.setFontSize(10);
-  doc.setFont("Amiri", "bold");
-  doc.text("بوابة", pageWidth - 25, 14, { align: "center" });
-  doc.text("التسهيل", pageWidth - 25, 18, { align: "center" });
+  // Logo - FIXED VERSION
+  try {
+    const logoPath = path.join(process.cwd(), "public", "images", "logo.png"); // Use PNG
+    const logoBuffer = fs.readFileSync(logoPath);
+    const logoBase64 = logoBuffer.toString("base64");
+    
+    // Logo dimensions and position
+    const logoSize = 12; // Size in mm
+    const logoX = pageWidth - margin - logoSize;
+    const logoY = 8;
+    
+    // White circle background for logo
+    doc.setFillColor(255, 255, 255);
+    doc.circle(logoX + logoSize / 2, logoY + logoSize / 2, logoSize / 2 + 1, "F");
+    
+    // ...
+    doc.addImage(
+      `data:image/png;base64,${logoBase64}`, // PNG instead of WEBP
+      'PNG',
+      logoX,
+      logoY,
+      logoSize,
+      logoSize
+    );
+  } catch (error) {
+    console.error("Error loading logo:", error);
+    // Fallback to text logo
+    doc.setFillColor(255, 255, 255);
+    doc.circle(pageWidth - 25, 15, 8, "F");
+    doc.setTextColor(0, 60, 127);
+    doc.setFontSize(10);
+    doc.setFont("Amiri", "bold");
+    doc.text(reverseArabicText("بوابة"), pageWidth - 25, 14, { align: "center" });
+    doc.text(reverseArabicText("التسهيل"), pageWidth - 25, 18, { align: "center" });
+  }
   
-  // Title
+  // Title - FIXED SPACING
   doc.setTextColor(255, 255, 255);
   doc.setFont("Amiri", "bold");
-  doc.setFontSize(24);
-  const titleLines = wrapText(report.title, maxWidth - 40, 24);
-  let titleY = 25;
+  doc.setFontSize(22);
+  const titleLines = wrapText(report.title, maxWidth - 30, 22);
+  let titleY = 32; // Better starting position
   titleLines.forEach((line: string) => {
     doc.text(line, pageWidth / 2, titleY, { align: "center" });
-    titleY += 8;
+    titleY += 9; // Better line spacing
   });
   
-  // Subtitle
+  // Add spacing between title and subtitle
+  titleY += 3;
+  
+  // Subtitle - FIXED SPACING
   if (report.subtitle) {
-    doc.setFontSize(16);
+    doc.setFontSize(14);
     doc.setFont("Amiri", "normal");
-    doc.setTextColor(220, 230, 240);
-    const subtitleLines = wrapText(report.subtitle, maxWidth - 40, 16);
+    doc.setTextColor(220, 235, 245);
+    const subtitleLines = wrapText(report.subtitle, maxWidth - 30, 14);
     subtitleLines.forEach((line: string) => {
       doc.text(line, pageWidth / 2, titleY, { align: "center" });
-      titleY += 6;
+      titleY += 7; // Better line spacing
     });
   }
   
   // Info bar
   doc.setFillColor(0, 50, 100);
-  doc.rect(0, 60, pageWidth, 15, "F");
+  doc.rect(0, 70, pageWidth, 12, "F");
   doc.setFontSize(9);
   doc.setTextColor(255, 255, 255);
+  doc.setFont("Amiri", "normal");
   const currentDate = new Date().toLocaleDateString("ar-SA", {
     year: "numeric",
     month: "long",
     day: "numeric",
   });
-  doc.text(reverseArabicText(`تاريخ التقرير: ${currentDate}`), pageWidth - 20, 69, { align: "right" });
-  doc.text(reverseArabicText("تقرير موثق ✓"), 20, 69);
+  doc.text((`تاريخ التقرير: ${currentDate}`), pageWidth - 20, 77, { align: "right" });
+  doc.text(("تقرير موثق ✓"), 20, 77);
   
-  currentY = 85;
+  currentY = 90;
   
   // ============================================================================
   // SECTIONS
@@ -263,7 +293,6 @@ function generateReportPDF(report: any): ArrayBuffer {
       doc.setFontSize(12);
       doc.setFont("Amiri", "bold");
       doc.setTextColor(0, 60, 127);
-      doc.text("النقاط الرئيسية:", pageWidth - 25, currentY, { align: "right" });
       currentY += 8;
       
       section.keyPoints.forEach((point: string) => {

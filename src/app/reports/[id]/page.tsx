@@ -10,7 +10,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
             title: "تقرير غير موجود",
             description: "تقرير غير موجود",
             icons: {
-                icon: "/images/logo.webp",
+                icon: "/images/logo.png",
             },
             openGraph: {
                 title: "تقرير غير موجود",
@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
         title: reportData.title+ " - تقرير",
         description: reportData.subtitle,
         icons: {
-            icon: "/images/logo.webp",
+            icon: "/images/logo.png",
         },
         openGraph: {
             title: reportData.title + " - تقرير",
