@@ -227,17 +227,16 @@ export function Footer() {
         </div>
       </div>
 
-      {/* Scroll to Top Button */}
       <button
-        onClick={scrollToTop}
-        className="fixed bottom-8 right-8 rtl:right-auto rtl:left-8 w-12 h-12 text-white rounded-full shadow-lg hover:shadow-2xl transition-all transform hover:scale-110 active:scale-95 z-40 flex items-center justify-center"
-        style={{
-          background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.secondary} 100%)`,
-        }}
-        aria-label="Scroll to top"
-      >
-        <ArrowUp className="w-6 h-6" />
-      </button>
+  onClick={scrollToTop}
+  className="fixed bottom-8 right-8 rtl:right-auto rtl:left-8 w-12 h-12 text-white rounded-full shadow-lg hover:shadow-2xl transition-all transform hover:scale-110 active:scale-95 z-30 flex items-center justify-center"
+  style={{
+    background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.secondary} 100%)`,
+  }}
+  aria-label="Scroll to top"
+>
+  <ArrowUp className="w-6 h-6" />
+</button>
     </footer>
   );
 }

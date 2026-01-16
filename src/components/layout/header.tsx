@@ -1,7 +1,7 @@
 // src/components/layout/header.tsx
 "use client";
 
-import { Moon, Sun, Globe, Menu, X, ArrowRight } from "lucide-react";
+import { Moon, Sun, Globe, Menu, X, ArrowRight, ArrowUp } from "lucide-react";
 import { useTheme } from "@/providers/theme-provider";
 import { useI18n } from "@/providers/i18n-provider";
 import Image from "next/image";
@@ -9,6 +9,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 
 export function Header() {
+
   const { theme, toggleTheme } = useTheme();
   const { language, toggleLanguage, t } = useI18n();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -51,22 +52,21 @@ export function Header() {
   }, [mobileMenuOpen]);
 
   // Navigation Items
-  const navItems = ["home", "steps", "about", "offers", "partners", "faq", "reports",'register'];
+  const navItems = ["home", "steps", "about", "offers", "partners", "faq", "reports", "register"];
 
   return (
     <>
       <header
-        className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ease-in-out border-b ${
+        className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ease-out ${
           scrolled
-            ? "bg-white/80 dark:bg-gray-950/80 backdrop-blur-lg border-gray-200 dark:border-gray-800 shadow-sm py-2"
-            : "bg-transparent border-transparent py-4"
+            ? "bg-white/90 dark:bg-gray-950/90 backdrop-blur-xl border-b border-gray-200/50 dark:border-gray-800/50 shadow-xl shadow-gray-900/5 dark:shadow-black/20 py-2 sm:py-3"
+            : "bg-transparent border-b border-transparent py-3 sm:py-5"
         }`}
       >
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
             
-            {/* --- Logo Area --- */}
-            <Link
+          <Link
               href="/"
               onClick={(e) => handleLinkClick(e, "/")}
               className="group flex items-center gap-3 relative z-50"
@@ -92,17 +92,17 @@ export function Header() {
             </Link>
 
             {/* --- Desktop Navigation --- */}
-            <nav className="hidden lg:flex items-center gap-1">
+            <nav className="hidden lg:flex items-center gap-1 bg-gray-50/50 dark:bg-gray-900/50 backdrop-blur-sm rounded-full px-2 py-1.5 border border-gray-200/50 dark:border-gray-800/50">
               {navItems.map((item) => (
                 <Link
                   key={item}
                   href={`/#${item}`}
                   onClick={(e) => handleLinkClick(e, `/#${item}`)}
-                  className="relative px-3 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-full hover:text-[#003C7F] dark:hover:text-blue-400 transition-colors group"
+                  className="relative px-4 py-2 text-sm font-semibold text-gray-600 dark:text-gray-300 rounded-full hover:text-[#003C7F] dark:hover:text-blue-400 hover:bg-white dark:hover:bg-gray-800 transition-all duration-200 group"
                 >
                   {t(item)}
-                  {/* Subtle underline animation instead of heavy gradient */}
-                  <span className="absolute inset-x-3 bottom-1 h-0.5 bg-[#00A8E8] scale-x-0 group-hover:scale-x-100 transition-transform origin-left rtl:origin-right rounded-full" />
+                  {/* Active dot indicator */}
+                  <span className="absolute top-1 right-1 w-1 h-1 bg-[#00A8E8] rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
                 </Link>
               ))}
             </nav>
@@ -143,15 +143,28 @@ export function Header() {
 
             {/* --- Mobile Toggle --- */}
             <div className="flex lg:hidden items-center gap-2">
-               <button
+              {/* Mobile Settings Group */}
+              <div className="flex items-center gap-1 p-1 rounded-full border border-gray-200 dark:border-gray-800 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm">
+                <button
                   onClick={toggleLanguage}
-                  className="w-9 h-9 flex items-center justify-center rounded-full text-sm font-bold border border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-900"
+                  className="w-8 h-8 flex items-center justify-center rounded-full text-xs font-bold text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                  aria-label="Switch Language"
                 >
                   {language === "ar" ? "EN" : "ع"}
-              </button>
+                </button>
+                <div className="w-px h-4 bg-gray-300 dark:bg-gray-700" />
+                <button
+                  onClick={toggleTheme}
+                  className="w-8 h-8 flex items-center justify-center rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                  aria-label="Toggle Theme"
+                >
+                  {theme === "light" ? <Moon size={14} /> : <Sun size={14} />}
+                </button>
+              </div>
+              
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="relative z-50 p-2.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                className="relative z-50 p-2.5 rounded-full bg-gradient-to-br from-[#003C7F] to-[#00A8E8] text-white shadow-lg shadow-blue-900/30 hover:shadow-blue-900/50 active:scale-95 transition-all"
                 aria-label="Toggle menu"
               >
                 {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
@@ -163,7 +176,7 @@ export function Header() {
 
       {/* --- Mobile Menu Overlay --- */}
       <div
-        className={`fixed inset-0 bg-gray-900/20 backdrop-blur-sm z-40 lg:hidden transition-opacity duration-300 ${
+        className={`fixed inset-0 bg-gray-900/30 backdrop-blur-md z-40 lg:hidden transition-opacity duration-300 ${
           mobileMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
         onClick={() => setMobileMenuOpen(false)}
@@ -173,8 +186,8 @@ export function Header() {
       <div
         className={`fixed inset-y-0 right-0 left-0 sm:left-auto sm:w-[400px] z-40 bg-white dark:bg-gray-950 shadow-2xl transform transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] lg:hidden flex flex-col ${
           mobileMenuOpen 
-            ? language === 'ar' ? 'translate-x-0' : 'translate-x-0' // Simplified for logic properties
-            : language === 'ar' ? '-translate-x-full' : 'translate-x-full' // RTL/LTR drawer logic
+            ? language === 'ar' ? 'translate-x-0' : 'translate-x-0'
+            : language === 'ar' ? '-translate-x-full' : 'translate-x-full'
         } ltr:right-0 rtl:left-0 rtl:right-auto`}
       >
         <div className="flex flex-col h-full pt-24 px-6 pb-6 overflow-y-auto">
@@ -185,7 +198,7 @@ export function Header() {
                 key={item}
                 href={`/#${item}`}
                 onClick={(e) => handleLinkClick(e, `/#${item}`)}
-                className={`flex items-center justify-between p-4 rounded-xl text-lg font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-900 transition-all group ${
+                className={`flex items-center justify-between p-4 rounded-xl text-lg font-medium text-gray-700 dark:text-gray-200 hover:bg-gradient-to-r hover:from-blue-50 hover:to-cyan-50 dark:hover:from-gray-900 dark:hover:to-gray-800 transition-all group ${
                     mobileMenuOpen ? "translate-x-0 opacity-100" : "translate-x-8 opacity-0"
                 }`}
                 style={{ transitionDelay: `${index * 50}ms` }}
@@ -197,26 +210,19 @@ export function Header() {
           </nav>
 
           {/* Mobile Footer Actions */}
-          <div className="mt-6 space-y-4 border-t border-gray-100 dark:border-gray-800 pt-6">
-            <div className="flex items-center justify-between gap-4">
-              <span className="text-sm text-gray-500 dark:text-gray-400 font-medium">Appearance</span>
-              <button
-                onClick={toggleTheme}
-                className="p-3 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200"
-              >
-                 {theme === "light" ? <Moon size={18} /> : <Sun size={18} />}
-              </button>
-            </div>
-            
+          <div className="mt-6 space-y-4 border-t border-gray-200 dark:border-gray-800 pt-6">
             <Link
               href="#register"
               onClick={(e) => handleLinkClick(e, "#register")}
-              className="flex items-center justify-center w-full py-4 bg-[#003C7F] text-white rounded-xl font-bold shadow-lg shadow-blue-900/20 active:scale-95 transition-transform"
+              className="flex items-center justify-center gap-2 w-full py-4 bg-gradient-to-r from-[#003C7F] to-[#00A8E8] text-white rounded-xl font-bold shadow-lg shadow-blue-900/30 active:scale-95 transition-transform"
             >
               {t("registerNow")}
+              <ArrowRight size={18} className="rtl:rotate-180" />
             </Link>
           </div>
+          
         </div>
+     
       </div>
     </>
   );
