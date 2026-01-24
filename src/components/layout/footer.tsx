@@ -133,12 +133,15 @@ export function Footer() {
               {language === "ar" ? "تواصل معنا" : "Contact Us"}
             </h4>
             <ul className="space-y-4">
-              <a href={whatsappUrl} className="flex  gap-3">
+              <div  className="flex items-center gap-2  ">
                 <Phone className="w-5 h-5  mt-0.5" style={{ color: colors.secondary }} />
-               <span className="text-sm text-gray-400">966599977725+</span>
-               <span className="text-sm text-gray-400">|</span>
-               <span className="text-sm text-gray-400">920031392</span>
-              </a>
+               <a href="tel:966599977725" className="text-sm text-gray-400">966599977725+</a>
+               <span className="text-sm text-gray-400 mx-2">|</span>
+               <a href="tel:966563771743" className="text-sm text-gray-400">966563771743+</a>
+               <span className="text-sm text-gray-400 mx-2">|</span>
+               <a href="tel:920031392" className="text-sm text-gray-400">920031392</a>
+               
+              </div>
               <li className="flex items-start gap-3">
                 <Mail className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: colors.secondary }} />
                 <div className="text-sm">
