@@ -137,8 +137,7 @@ export function Footer() {
                 <Phone className="w-5 h-5  mt-0.5" style={{ color: colors.secondary }} />
                <a href="tel:966599977725" className="text-sm text-gray-400">966599977725+</a>
                <span className="text-sm text-gray-400 mx-2">|</span>
-               <a href="tel:966563771743" className="text-sm text-gray-400">966563771743+</a>
-               <span className="text-sm text-gray-400 mx-2">|</span>
+               
                <a href="tel:920031392" className="text-sm text-gray-400">920031392</a>
                
               </div>
