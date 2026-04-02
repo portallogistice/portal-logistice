@@ -11,8 +11,10 @@ const colors = {
 
 export function WhatsAppButton() {
   const { language } = useI18n();
-  const phoneNumber = "+966599977725"; // WhatsApp number without spaces
-  const whatsappUrl = `https://wa.me/${phoneNumber}`;
+  const phoneNumber = "966599977725"; // WhatsApp number without spaces or +
+  const prefilledMessage =
+    "أهلاً بكم.. أتابع باهتمام نشاط بوابة التسهيل للخدمات اللوجستية، ولدي رغبة جادة في استكشاف الفرص الاستثمارية المتاحة لديكم. أرجو تزويدي بتفاصيل نموذج العمل الخاص بتشغيل الأصول اللوجستية، والعوائد المتوقعة، وسبل ضمان الاستثمار";
+  const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(prefilledMessage)}`;
 
   const handleWhatsAppClick = () => {
     window.open(whatsappUrl, "_blank", "noopener,noreferrer");
@@ -21,7 +23,7 @@ export function WhatsAppButton() {
   return (
     <button
       onClick={handleWhatsAppClick}
-      className="fixed bottom-24 left-4 rtl:left-auto rtl:right-4 z-50 w-14 h-14 rounded-full shadow-2xl flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 group"
+      className="fixed bottom-28 left-6 rtl:left-auto rtl:right-4 z-50 w-14 h-14 rounded-full shadow-2xl flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 group"
       style={{
         background: "linear-gradient(135deg, #25D366 0%, #128C7E 100%)",
       }}
