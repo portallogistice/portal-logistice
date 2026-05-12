@@ -16,21 +16,23 @@ import { useI18n } from "@/providers/i18n-provider";
 
 export default function Home() {
   return (
- 
- <>
-<HeroSection />
-<TrustBarSection />
-<VideoSection />
-<ROICalculatorSection /> 
-<DigitalChatSection />
-<AboutSection />
-<StepsSection />
-<OffersSection />
-<PartnersSection />
-<FAQSection />
-<ReportsSection />
-<RegisterSection />
-<Footer />
-</>
+
+    <>
+      <HeroSection />
+      <TrustBarSection />
+      <VideoSection />
+      <ROICalculatorSection />
+      <DigitalChatSection />
+      <AboutSection />
+      <StepsSection />
+      <OffersSection />
+      <PartnersSection />
+      <FAQSection />
+      <ReportsSection />
+      <RegisterSection />
+      <Footer />
+    </>
+
+
   );
 }
