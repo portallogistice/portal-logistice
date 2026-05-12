@@ -84,12 +84,60 @@ export default function RootLayout({
             `,
           }}
         />
-        
+        <Script
+          id="gclid-capture"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                function getUrlParameter(name) {
+                  var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+                  return match && decodeURIComponent(match[1].replace(/\\+/g, ' '));
+                }
+                function setCookie(name, value, days) {
+                  var expires = new Date();
+                  expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+                  document.cookie = name + '=' + value +
+                    ';expires=' + expires.toUTCString() +
+                    ';path=/;SameSite=Lax';
+                }
+                function getCookie(name) {
+                  var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+                  return match ? match[2] : null;
+                }
+
+                var gclid = getUrlParameter('gclid');
+                if (gclid) {
+                  setCookie('gclid', gclid, 90);
+                  setCookie('gclid_timestamp', new Date().toISOString(), 90);
+                }
+
+                ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'].forEach(function(param) {
+                  var value = getUrlParameter(param);
+                  if (value) setCookie(param, value, 90);
+                });
+
+                window.getStoredGclid = function() {
+                  return getCookie('gclid') || '';
+                };
+                window.getStoredUtmData = function() {
+                  return {
+                    utm_source:   getCookie('utm_source')   || '',
+                    utm_medium:   getCookie('utm_medium')   || '',
+                    utm_campaign: getCookie('utm_campaign') || '',
+                    utm_term:     getCookie('utm_term')     || '',
+                    utm_content:  getCookie('utm_content')  || ''
+                  };
+                };
+              })();
+            `,
+          }}
+        />
       </head>
       <body
         className={`${cairo.variable} ${inter.variable} font-sans antialiased bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 transition-colors overflow-x-hidden`}
       >
-          <noscript>
+        <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-M5RWZFC3"
             height="0"
@@ -100,13 +148,10 @@ export default function RootLayout({
         <ThemeProvider>
           <I18nProvider>
             <Header />
-            <main className="w-full  overflow-x-hidden">{children}</main>
+            <main className="w-full overflow-x-hidden">{children}</main>
             <WhatsAppButton />
           </I18nProvider>
         </ThemeProvider>
-        
-        
-        {/* Tawk.to Chat Script */}
         <Script
           id="tawk-to"
           strategy="afterInteractive"

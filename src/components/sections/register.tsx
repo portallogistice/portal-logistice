@@ -2,7 +2,7 @@
 "use client";
 
 import { useI18n } from "@/providers/i18n-provider";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { User, MapPin, Phone, Clock, Send, CheckCircle2, Sparkles } from "lucide-react";
 
 const colors = {
@@ -10,6 +10,16 @@ const colors = {
   secondary: "#00A8E8",
   accent: "#0080C8",
 };
+
+// ====== التعديل ٢: نوع بيانات التتبع ======
+interface TrackingData {
+  gclid: string;
+  utm_source: string;
+  utm_medium: string;
+  utm_campaign: string;
+  page_url: string;
+  referrer: string;
+}
 
 export function RegisterSection() {
   const { language } = useI18n();
@@ -24,85 +34,120 @@ export function RegisterSection() {
   const [error, setError] = useState("");
   const [phoneError, setPhoneError] = useState("");
 
+  // ====== التعديل ٢: حالة بيانات التتبع المخفية ======
+  const [trackingData, setTrackingData] = useState<TrackingData>({
+    gclid: "",
+    utm_source: "",
+    utm_medium: "",
+    utm_campaign: "",
+    page_url: "",
+    referrer: "",
+  });
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const w = window as any;
+      const utmData = w.getStoredUtmData ? w.getStoredUtmData() : {};
+      setTrackingData({
+        gclid: w.getStoredGclid ? w.getStoredGclid() : "",
+        utm_source: utmData.utm_source || "",
+        utm_medium: utmData.utm_medium || "",
+        utm_campaign: utmData.utm_campaign || "",
+        page_url: window.location.href,
+        referrer: document.referrer || "direct",
+      });
+    }
+  }, []);
+
   // Validate Saudi phone number (starts with 05, 10 digits total)
   const validatePhone = (phone: string): boolean => {
-    // Remove any spaces, dashes, or other characters
-    const cleanedPhone = phone.replace(/[\s\-\(\)]/g, '');
-    
-    // Check if it starts with 05 and has exactly 10 digits
+    const cleanedPhone = phone.replace(/[\s\-\(\)]/g, "");
     const phoneRegex = /^05\d{8}$/;
-    
+
     if (!cleanedPhone) {
       setPhoneError(language === "ar" ? "رقم الهاتف مطلوب" : "Phone number is required");
       return false;
     }
-    
     if (!phoneRegex.test(cleanedPhone)) {
-      setPhoneError(language === "ar" ? "يرجى إدخال رقم هاتف صحيح (يبدأ بـ 05 ويتكون من 10 أرقام)" : "Please enter a valid phone number (starts with 05, 10 digits)");
+      setPhoneError(
+        language === "ar"
+          ? "يرجى إدخال رقم هاتف صحيح (يبدأ بـ 05 ويتكون من 10 أرقام)"
+          : "Please enter a valid phone number (starts with 05, 10 digits)"
+      );
       return false;
     }
-    
     setPhoneError("");
     return true;
   };
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    // Only allow numbers
-    const numericValue = value.replace(/\D/g, '');
-    
-    // Limit to 10 digits
+    const numericValue = value.replace(/\D/g, "");
     const limitedValue = numericValue.slice(0, 10);
-    
     setFormData({ ...formData, phone: limitedValue });
-    
-    // Clear error when user starts typing
-    if (phoneError) {
-      setPhoneError("");
-    }
+    if (phoneError) setPhoneError("");
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setPhoneError("");
-    
-    // Validate phone number before submission
-    if (!validatePhone(formData.phone)) {
-      return;
-    }
-    
+
+    if (!validatePhone(formData.phone)) return;
+
     setIsSubmitting(true);
-    
+
     try {
-      // Send data to your backend API
-      const response = await fetch('/api/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+      // ====== التعديل ٣: إرسال بيانات التتبع مع النموذج ======
+      const response = await fetch("/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...formData,
           timestamp: new Date().toISOString(),
+          // الحقول الجديدة للتتبع
+          gclid: trackingData.gclid,
+          utm_source: trackingData.utm_source,
+          utm_medium: trackingData.utm_medium,
+          utm_campaign: trackingData.utm_campaign,
+          page_url: trackingData.page_url,
+          referrer: trackingData.referrer,
         }),
       });
+      // ====== نهاية التعديل ٣ ======
 
-      if (!response.ok) {
-        throw new Error('Failed to submit registration');
-      }
+      if (!response.ok) throw new Error("Failed to submit registration");
 
       const result = await response.json();
-      console.log('Registration saved:', result);
-      
+      console.log("Registration saved:", result);
+
+      // ====== التعديل ٥: إطلاق حدث dataLayer عند نجاح الإرسال ======
+      if (typeof window !== "undefined") {
+        const w = window as any;
+        w.dataLayer = w.dataLayer || [];
+        w.dataLayer.push({
+          event: "investor_registration_success",
+          form_name: "investor_registration",
+          has_gclid: trackingData.gclid ? "yes" : "no",
+          utm_source: trackingData.utm_source || "direct",
+          investor_city: formData.city,
+        });
+      }
+      // ====== نهاية التعديل ٥ ======
+
       setIsSuccess(true);
-      
+
       setTimeout(() => {
         setFormData({ fullName: "", city: "", phone: "", callTime: "" });
         setIsSuccess(false);
       }, 3000);
     } catch (err) {
-      setError(language === "ar" ? "حدث خطأ. يرجى المحاولة مرة أخرى." : "An error occurred. Please try again.");
-      console.error('Registration error:', err);
+      setError(
+        language === "ar"
+          ? "حدث خطأ. يرجى المحاولة مرة أخرى."
+          : "An error occurred. Please try again."
+      );
+      console.error("Registration error:", err);
     } finally {
       setIsSubmitting(false);
     }
@@ -120,16 +165,16 @@ export function RegisterSection() {
   ];
 
   return (
-    <section 
-      id="register" 
+    <section
+      id="register"
       className="relative py-20 lg:py-28 bg-gradient-to-b from-blue-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900"
     >
       <div className="absolute inset-0 opacity-5 pointer-events-none">
-        <div 
+        <div
           className="absolute top-0 left-0 w-96 h-96 rounded-full blur-3xl"
           style={{ background: `radial-gradient(circle, ${colors.primary}, transparent)` }}
         />
-        <div 
+        <div
           className="absolute bottom-0 right-0 w-96 h-96 rounded-full blur-3xl"
           style={{ background: `radial-gradient(circle, ${colors.secondary}, transparent)` }}
         />
@@ -138,41 +183,33 @@ export function RegisterSection() {
       <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-2xl mx-auto">
           <div className="text-center mb-12">
-            <div 
+            <div
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6 backdrop-blur-sm"
               style={{
                 backgroundColor: `${colors.secondary}10`,
                 border: `1px solid ${colors.secondary}20`,
               }}
             >
-              <div 
-                className="p-1.5 rounded-full"
-                style={{ backgroundColor: `${colors.secondary}20` }}
-              >
+              <div className="p-1.5 rounded-full" style={{ backgroundColor: `${colors.secondary}20` }}>
                 <Sparkles className="w-4 h-4" style={{ color: colors.secondary }} />
               </div>
-              <span 
-                className="text-sm font-bold uppercase tracking-wide"
-                style={{ color: colors.primary }}
-              >
+              <span className="text-sm font-bold uppercase tracking-wide" style={{ color: colors.primary }}>
                 {language === "ar" ? "انضم إلينا" : "Join Us"}
               </span>
             </div>
-            
+
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 leading-tight">
               <span style={{ color: colors.primary }}>
                 {language === "ar" ? "سجل الآن و " : "register now and "}
               </span>
-              <span 
+              <span
                 className="bg-clip-text text-transparent"
-                style={{
-                  backgroundImage: `linear-gradient(135deg, ${colors.secondary} 0%, ${colors.accent} 100%)`,
-                }}
+                style={{ backgroundImage: `linear-gradient(135deg, ${colors.secondary} 0%, ${colors.accent} 100%)` }}
               >
                 {language === "ar" ? "سنتواصل معك في أقرب وقت ممكن" : "will contact you as soon as possible"}
               </span>
             </h2>
-            
+
             <p className="text-lg text-gray-600 dark:text-gray-400 max-w-xl mx-auto">
               {language === "ar"
                 ? "بوابة الخدمات اللوجستية لاستثمار الأصول وتشغيلها كدراجات نارية ومركبات نقل"
@@ -180,30 +217,23 @@ export function RegisterSection() {
             </p>
           </div>
 
-          <div 
+          <div
             className="relative bg-white dark:bg-gray-900 rounded-2xl border-2 shadow-2xl p-8 lg:p-10"
             style={{ borderColor: `${colors.secondary}20` }}
           >
             {isSuccess ? (
               <div className="text-center py-12">
-                <div 
+                <div
                   className="inline-flex items-center justify-center w-20 h-20 rounded-full mb-6 shadow-lg"
-                  style={{
-                    background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.secondary} 100%)`,
-                  }}
+                  style={{ background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.secondary} 100%)` }}
                 >
                   <CheckCircle2 className="w-12 h-12 text-white" />
                 </div>
-                <h3 
-                  className="text-2xl font-bold mb-3"
-                  style={{ color: colors.primary }}
-                >
+                <h3 className="text-2xl font-bold mb-3" style={{ color: colors.primary }}>
                   {language === "ar" ? "تم التسجيل بنجاح!" : "Registration Successful!"}
                 </h3>
                 <p className="text-gray-600 dark:text-gray-400">
-                  {language === "ar"
-                    ? "سنتواصل معك في أقرب وقت ممكن"
-                    : "We will contact you as soon as possible"}
+                  {language === "ar" ? "سنتواصل معك في أقرب وقت ممكن" : "We will contact you as soon as possible"}
                 </p>
               </div>
             ) : (
@@ -214,11 +244,17 @@ export function RegisterSection() {
                   </div>
                 )}
 
+                {/* ====== التعديل ٢: الحقول المخفية للتتبع ====== */}
+                <input type="hidden" name="gclid" value={trackingData.gclid} />
+                <input type="hidden" name="utm_source" value={trackingData.utm_source} />
+                <input type="hidden" name="utm_medium" value={trackingData.utm_medium} />
+                <input type="hidden" name="utm_campaign" value={trackingData.utm_campaign} />
+                <input type="hidden" name="page_url" value={trackingData.page_url} />
+                <input type="hidden" name="referrer" value={trackingData.referrer} />
+                {/* ====== نهاية الحقول المخفية ====== */}
+
                 <div>
-                  <label 
-                    className="flex items-center gap-2 text-sm font-bold mb-2"
-                    style={{ color: colors.primary }}
-                  >
+                  <label className="flex items-center gap-2 text-sm font-bold mb-2" style={{ color: colors.primary }}>
                     <User className="w-4 h-4" />
                     {language === "ar" ? "الاسم الكامل" : "Full Name"}
                     <span className="text-red-500">*</span>
@@ -230,17 +266,14 @@ export function RegisterSection() {
                     onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
                     className="w-full px-4 py-3 rounded-xl border-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-white transition-all focus:outline-none"
                     style={{ borderColor: "#e5e7eb" }}
-                    onFocus={(e) => e.target.style.borderColor = colors.secondary}
-                    onBlur={(e) => e.target.style.borderColor = "#e5e7eb"}
+                    onFocus={(e) => (e.target.style.borderColor = colors.secondary)}
+                    onBlur={(e) => (e.target.style.borderColor = "#e5e7eb")}
                     placeholder={language === "ar" ? "أدخل اسمك الكامل" : "Enter your full name"}
                   />
                 </div>
 
                 <div>
-                  <label 
-                    className="flex items-center gap-2 text-sm font-bold mb-2"
-                    style={{ color: colors.primary }}
-                  >
+                  <label className="flex items-center gap-2 text-sm font-bold mb-2" style={{ color: colors.primary }}>
                     <MapPin className="w-4 h-4" />
                     {language === "ar" ? "من أي مدينة" : "City"}
                     <span className="text-red-500">*</span>
@@ -252,17 +285,14 @@ export function RegisterSection() {
                     onChange={(e) => setFormData({ ...formData, city: e.target.value })}
                     className="w-full px-4 py-3 rounded-xl border-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-white transition-all focus:outline-none"
                     style={{ borderColor: "#e5e7eb" }}
-                    onFocus={(e) => e.target.style.borderColor = colors.secondary}
-                    onBlur={(e) => e.target.style.borderColor = "#e5e7eb"}
+                    onFocus={(e) => (e.target.style.borderColor = colors.secondary)}
+                    onBlur={(e) => (e.target.style.borderColor = "#e5e7eb")}
                     placeholder={language === "ar" ? "أدخل مدينتك" : "Enter your city"}
                   />
                 </div>
 
                 <div>
-                  <label 
-                    className="flex items-center gap-2 text-sm font-bold mb-2"
-                    style={{ color: colors.primary }}
-                  >
+                  <label className="flex items-center gap-2 text-sm font-bold mb-2" style={{ color: colors.primary }}>
                     <Phone className="w-4 h-4" />
                     {language === "ar" ? "رقم الهاتف" : "Phone Number"}
                     <span className="text-red-500">*</span>
@@ -277,9 +307,7 @@ export function RegisterSection() {
                       validatePhone(formData.phone);
                     }}
                     className="w-full px-4 py-3 rounded-xl border-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-white transition-all focus:outline-none"
-                    style={{ 
-                      borderColor: phoneError ? "#ef4444" : "#e5e7eb"
-                    }}
+                    style={{ borderColor: phoneError ? "#ef4444" : "#e5e7eb" }}
                     onFocus={(e) => {
                       e.target.style.borderColor = colors.secondary;
                       setPhoneError("");
@@ -302,10 +330,7 @@ export function RegisterSection() {
                 </div>
 
                 <div>
-                  <label 
-                    className="flex items-center gap-2 text-sm font-bold mb-2"
-                    style={{ color: colors.primary }}
-                  >
+                  <label className="flex items-center gap-2 text-sm font-bold mb-2" style={{ color: colors.primary }}>
                     <Clock className="w-4 h-4" />
                     {language === "ar" ? "الوقت المناسب للاتصال" : "Preferred Call Time"}
                     <span className="text-red-500">*</span>
@@ -316,8 +341,8 @@ export function RegisterSection() {
                     onChange={(e) => setFormData({ ...formData, callTime: e.target.value })}
                     className="w-full px-4 py-3 rounded-xl border-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-white transition-all focus:outline-none"
                     style={{ borderColor: "#e5e7eb" }}
-                    onFocus={(e) => e.target.style.borderColor = colors.secondary}
-                    onBlur={(e) => e.target.style.borderColor = "#e5e7eb"}
+                    onFocus={(e) => (e.target.style.borderColor = colors.secondary)}
+                    onBlur={(e) => (e.target.style.borderColor = "#e5e7eb")}
                   >
                     <option value="">
                       {language === "ar" ? "اختر الوقت المناسب" : "Select preferred time"}
@@ -334,9 +359,7 @@ export function RegisterSection() {
                   type="submit"
                   disabled={isSubmitting}
                   className="w-full flex items-center justify-center gap-2 px-6 py-4 text-white font-bold rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-                  style={{
-                    background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.secondary} 100%)`,
-                  }}
+                  style={{ background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.secondary} 100%)` }}
                 >
                   {isSubmitting ? (
                     <>
